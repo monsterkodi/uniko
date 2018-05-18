@@ -1,0 +1,25 @@
+name            uniko
+productName     uniko
+version         0.1.1
+description     unicode tool
+main            js/main.js
+repository
+                type  git
+                url   git+https://github.com/monsterkodi/uniko.git
+scripts
+                mac   ./bin/buildmac.sh
+                win   bash ./bin/buildwin.sh
+keywords
+                unicode
+                electron
+author          monsterkodi
+license         Unlicense
+bugs
+                url  https://github.com/monsterkodi/uniko/issues
+dependencies
+                coffeescript  ^2.3.0
+                kxk           ^0.74.0
+devDependencies
+                electron        ^2.0.1
+                electron-packager  ^12.0.2
+                electron-rebuild  ^1.7.3
