@@ -23,7 +23,7 @@ class Menu
     
             text: "#{pkg.name}"
             menu: [
-                text:   "About #{pkg.name}",            accel:  'ctrl+shift+/'
+                text:   "About",                        accel:  'ctrl+shift+/'
             ,
                 text:   ''
             ,
@@ -54,9 +54,9 @@ class Menu
             ,
                 text:   ''
             ,
-                text:   'Reload Window',                accel:  'alt+ctrl+l'
+                text:   'Reload',                       accel:  'alt+ctrl+l'
             ,
-                text:   'Open DevTools',                accel:  'alt+ctrl+i'
+                text:   'DevTools',                     accel:  'alt+ctrl+i'
             ]
         ]
     

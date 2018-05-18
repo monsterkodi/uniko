@@ -1,5 +1,4 @@
 name            uniko
-productName     uniko
 version         0.1.1
 description     unicode tool
 main            js/main.js

@@ -194,8 +194,8 @@ app.on 'ready', ->
 onMenuAction = (action, arg) ->
 
     switch action
-        when 'Quit'        then quitApp()
-        when 'About uniko' then showAbout()
+        when 'Quit'     then quitApp()
+        when 'About'    then showAbout()
         
 app.setName pkg.name        
         
