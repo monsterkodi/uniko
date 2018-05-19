@@ -60,17 +60,20 @@ body
     min-height          80px
     margin              10px
     border-radius       10px
+    overflow            hidden
 
 .input-text 
+    overflow            hidden
     position            absolute
     height              auto
-    width               auto
+    left                10px
     text-align          left
     padding-left        10px
     padding-right       10px
     font-size           60px
     -webkit-user-select auto
-    white-space         pre
+    font-family         fontMono
+    white-space         wrap
     
 //  0000000  000   000  00000000  00000000  000000000  
 // 000       000   000  000       000          000     
@@ -83,11 +86,12 @@ body
     height              100%
     -webkit-user-select auto
     overflow            auto
+    pointer-events      all
     // border              1px solid blue
     & .text
         // border          1px solid red
         font-family     "Arial Unicode MS"
-        font-size       200px
+        // font-size       200px
 
 // 000000000  000  000000000  000      00000000  0000000     0000000   00000000 
 //    000     000     000     000      000       000   000  000   000  000   000

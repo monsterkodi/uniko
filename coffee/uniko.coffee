@@ -75,27 +75,14 @@ menuAction = (name, args) ->
         when 'Clear'            then return window.sheet.clear()
         when 'Minimize'         then return win.minimize()
         when 'Maximize'         then if win.isMaximized() then win.unmaximize() else win.maximize()        
+        when 'Font Size Reset'      then return window.sheet.resetFontSize()
+        when 'Font Size Increase'   then return window.sheet.changeFontSize +1
+        when 'Font Size Decrease'   then return window.sheet.changeFontSize -1
         
     # log "unhandled menu action! ------------ posting to main '#{name}' args: #{args}"
     
     post.toMain 'menuAction', name, args
-    
-#  0000000   0000000   00000000   000   000        00000000    0000000    0000000  000000000  00000000    
-# 000       000   000  000   000   000 000         000   000  000   000  000          000     000         
-# 000       000   000  00000000     00000          00000000   000000000  0000000      000     0000000     
-# 000       000   000  000           000           000        000   000       000     000     000         
-#  0000000   0000000   000           000           000        000   000  0000000      000     00000000    
-    
-copy = ->
-    clipboard?.writeText window.input.text()
-
-paste = ->
-    window.input.setText clipboard?.readText()
-    
-cut = ->
-    copy()
-    window.input.clear()
-    
+        
 # 000   000  00000000  000   000
 # 000  000   000        000 000
 # 0000000    0000000     00000
@@ -114,11 +101,11 @@ document.onkeydown = (event) ->
     return stopEvent(event) if 'unhandled' != window.menu.globalModKeyComboEvent mod, key, combo, event
     
     switch combo
-        when 'i', 'command+i', 'ctrl+i', 'alt+i' then return scheme.toggle()
-        when 'ctrl+v'                            then return paste()
-        when 'ctrl+c'                            then return copy()
-        when 'ctrl+x'                            then return cut()
-        when 'esc', 'delete'                     then menuAction 'Reset'
+        when 'command+i', 'ctrl+i', 'alt+i' then return scheme.toggle()
+        when 'ctrl+='                       then return menuAction 'Font Size Increase'
+        when 'ctrl+-'                       then return menuAction 'Font Size Decrease'
+        when 'ctrl+0'                       then return menuAction 'Font Size Reset'
+        when 'esc'                               then menuAction 'Reset'
 
 prefs.init()
 scheme.set prefs.get 'scheme', 'dark'

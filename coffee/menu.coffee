@@ -57,6 +57,17 @@ class Menu
                 text:   'Reload',                       accel:  'alt+ctrl+l'
             ,
                 text:   'DevTools',                     accel:  'alt+ctrl+i'
+            ,
+                text:   ''
+            ,
+                text:   'Font Size'
+                menu: [
+                    text:   'Increase',                 accel:  'ctrl+=',   action: 'Font Size Increase'   
+                ,
+                    text:   'Decrease',                 accel:  'ctrl+-',   action: 'Font Size Decrease'
+                ,
+                    text:   'Reset',                    accel:  'ctrl+0',   action: 'Font Size Reset'
+                ]
             ]
         ]
     
