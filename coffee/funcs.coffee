@@ -10,5 +10,4 @@ class Funcs
 
     constructor: () ->
 
-
 module.exports = Funcs

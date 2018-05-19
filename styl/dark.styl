@@ -41,38 +41,11 @@ pre
 // 000  000   000  000         0000000      000     
 
 #input
-    border              1px solid #222
+    border              1px solid frameColor
     
 .input-text 
     color               #fff
-  
-.key
-span
-    border              none
-    white-space         pre
-    &.nan
-        color           #f00
-    &.digit
-        color           #88f
-    &.function
-        color           #f80
-    &.constant
-        color           #ff0
-    &.op0
-        color           #fff
-    &.op1
-        color           #aaf
-    &.op2
-        color           #66f
-    &.bracket
-        color           #333
-    &.equals
-        color           #444
-    &.dot
-    &.exponent
-    &.complex
-        color           #44a
-    
+      
 // 00     00  00000000  000   000  000   000  
 // 000   000  000       0000  000  000   000  
 // 000000000  0000000   000 0 000  000   000  
@@ -80,11 +53,11 @@ span
 // 000   000  00000000  000   000   0000000   
             
 .menuItem
-    color               #444
-    background-color    titleColor // #222
+    color               #888
+    background-color    titleColor
     
 .menuItem.selected
-    color               #666
+    color               #aaa
     
 .menu:focus .menuItem
     color               #888
@@ -98,7 +71,7 @@ span
 // 000         0000000   000         0000000   000
 
 .popup
-    background-color    #222
+    background-color    frameColor
 
 .popupItem
     color               #888
@@ -126,7 +99,7 @@ span
 // 0000000    0000000  000   000   0000000   0000000  0000000 
 
 ::-webkit-scrollbar-corner
-    background-color        #222
+    background-color        frameColor
 
 ::-webkit-scrollbar-thumb
     background-color        #2d2d2d

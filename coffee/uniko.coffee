@@ -8,6 +8,7 @@
 
 { keyinfo, scheme, stopEvent, prefs, slash, post, elem, popup, pos, str, log, $ } = require 'kxk'
 
+Exec      = require './exec'
 Input     = require './input'
 Parse     = require './parse'
 Sheet     = require './sheet'
@@ -125,4 +126,5 @@ window.titlebar = new Titlebar
 window.input    = new Input
 window.parse    = new Parse
 window.sheet    = new Sheet
+window.exec     = new Exec
 window.menu     = new Menu

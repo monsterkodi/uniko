@@ -12,7 +12,7 @@ class Input
 
     constructor: ->
         
-        @view = $ "#input"
+        @view  = $ "#input"
         @plain = ''
         @input = elem class:'input-text', style: 'font-size: 60px'
         @view.appendChild @input
@@ -20,7 +20,7 @@ class Input
     popChar:    (txt) -> txt.substr 0, txt.length-1
     backspace:        -> @setText @popChar @text()
     complete:         -> log 'complete'
-    execute:          -> post.emit 'sheet', action:'addText', text:@text()
+    execute:          -> post.emit 'exec', @text()
     appendText: (txt) -> @setText @text() + txt
     textLength:       -> @text().length
     clear:            -> @setText ''
