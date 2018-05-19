@@ -19,6 +19,8 @@ class Input
          
     popChar:    (txt) -> txt.substr 0, txt.length-1
     backspace:        -> @setText @popChar @text()
+    complete:         -> log 'complete'
+    execute:          -> post.emit 'sheet', action:'addText', text:@text()
     appendText: (txt) -> @setText @text() + txt
     textLength:       -> @text().length
     clear:            -> @setText ''
@@ -27,13 +29,13 @@ class Input
     setText: (@plain) -> 
         @input.innerHTML = @plain
         fs = parseInt @input.style.fontSize
-        log fs, @input.style.fontSize
         while fs > 10 and @input.clientWidth > @view.clientWidth
             fs -=1 
             @input.style.fontSize = "#{fs}px"
         while fs < 60 and @input.clientWidth < @view.clientWidth-60
             fs +=1 
             @input.style.fontSize = "#{fs}px"
+        post.emit 'input', @plain
         
     # 000   000  00000000  000   000
     # 000  000   000        000 000 
@@ -45,10 +47,11 @@ class Input
         
         switch key
             when 'backspace' then return @backspace()
+            when 'tab'       then return @complete()
+            when 'enter'     then return @execute()
             else
-                if char?
-                    # log "mod:#{mod} key:#{key} combo:#{combo} char:#{char}"
-                    return @appendText char
+                if char? then return @appendText char
+        # log "unhandled mod:#{mod} key:#{key} combo:#{combo} char:#{char}"
         'unhandled'
     
 module.exports = Input

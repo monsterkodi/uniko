@@ -9,8 +9,10 @@
 { keyinfo, scheme, stopEvent, prefs, slash, post, elem, popup, pos, str, log, $ } = require 'kxk'
 
 Input     = require './input'
+Parse     = require './parse'
+Sheet     = require './sheet'
 Menu      = require './menu'
-Titlebar  = require './titlebar'
+Titlebar  = require './title'
 electron  = require 'electron'
 pkg       = require '../package.json'
 
@@ -68,7 +70,8 @@ menuAction = (name, args) ->
         when 'DevTools'         then return win.webContents.openDevTools()
         when 'Reload'           then return win.webContents.reloadIgnoringCache()
         when 'Close Window'     then return win.close()
-        when 'Clear'            then return window.input.clear()
+        when 'Reset'            then return window.input.clear()
+        when 'Clear'            then return window.sheet.clear()
         when 'Minimize'         then return win.minimize()
         when 'Maximize'         then if win.isMaximized() then win.unmaximize() else win.maximize()        
         
@@ -106,18 +109,20 @@ document.onkeydown = (event) ->
 
     return if not combo
 
-    return stopEvent(event) if 'unhandled' != window.menu.globalModKeyComboEvent mod, key, combo, event
     return stopEvent(event) if 'unhandled' != window.input.globalModKeyComboCharEvent mod, key, combo, char, event
+    return stopEvent(event) if 'unhandled' != window.menu.globalModKeyComboEvent mod, key, combo, event
     
     switch combo
         when 'i', 'command+i', 'ctrl+i', 'alt+i' then return scheme.toggle()
         when 'ctrl+v'                            then return paste()
         when 'ctrl+c'                            then return copy()
         when 'ctrl+x'                            then return cut()
-        when 'esc', 'delete'                     then menuAction 'Clear'
+        when 'esc', 'delete'                     then menuAction 'Reset'
 
 prefs.init()
 scheme.set prefs.get 'scheme', 'dark'
 window.titlebar = new Titlebar 
 window.input    = new Input
+window.parse    = new Parse
+window.sheet    = new Sheet
 window.menu     = new Menu

@@ -1,9 +1,9 @@
 ###
-000000000  000  000000000  000      00000000  0000000     0000000   00000000 
-   000     000     000     000      000       000   000  000   000  000   000
-   000     000     000     000      0000000   0000000    000000000  0000000  
-   000     000     000     000      000       000   000  000   000  000   000
-   000     000     000     0000000  00000000  0000000    000   000  000   000
+000000000  000  000000000  000      00000000
+   000     000     000     000      000     
+   000     000     000     000      0000000 
+   000     000     000     000      000     
+   000     000     000     0000000  00000000
 ###
 
 { elem, slash, post, log, $ } = require 'kxk'
@@ -36,6 +36,11 @@ class Titlebar
         @elem.appendChild @minimize
         @minimize.appendChild elem 'img', src:slash.fileUrl __dirname + '/../img/minimize.png'
         @minimize.addEventListener 'click', -> post.emit 'menuAction', 'Minimize'
+        
+        @maximize = elem class: 'winclose gray'
+        @elem.appendChild @maximize
+        @maximize.appendChild elem 'img', src:slash.fileUrl __dirname + '/../img/maximize.png'
+        @maximize.addEventListener 'click', -> post.emit 'menuAction', 'Maximize'
 
         @close = elem class: 'winclose'
         @elem.appendChild @close
