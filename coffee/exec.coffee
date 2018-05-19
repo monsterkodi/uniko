@@ -16,16 +16,16 @@ class Exec
 
     addChars: (list) -> 
         
-        post.emit 'sheet', action:'addText', text:list.map((n) -> "&##{n};").join ' '
+        post.emit 'sheet', action:'addChars', chars:list
         true
         
     unicodeChar: (text) ->
         
         if /^\d+$/.test text
-            return post.emit 'sheet', action:'addChar', char:"&##{[parseInt text]};" 
+            return post.emit 'sheet', action:'addChar', char:parseInt text
             
         else if /^\+[\da-fA-F]+$/.test text
-            return post.emit 'sheet', action:'addChar', char:"&##{[parseInt text.slice(1), 16]};" 
+            return post.emit 'sheet', action:'addChar', char:parseInt text.slice(1), 16
         
     unicodeList: (text) ->
         
@@ -50,6 +50,7 @@ class Exec
         switch 
             when text == 'c'       then post.emit 'menuAction', 'Clear'
             when text == 'd'       then post.emit 'sheet', action:'backspace'
+            when text == 'm'       then post.emit 'sheet', action:'monospace'
             when /^f\d+/.test text then post.emit 'sheet', action:'fontSize', fontSize:parseInt text.substr 1
             when @unicodeChar text then return
             when @unicodeList text then return

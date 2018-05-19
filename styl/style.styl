@@ -86,12 +86,12 @@ body
     height              100%
     -webkit-user-select auto
     overflow            auto
+    cursor              text
     pointer-events      all
-    // border              1px solid blue
-    & .text
-        // border          1px solid red
-        font-family     "Arial Unicode MS"
-        // font-size       200px
+    font-family         "Arial Unicode MS"
+
+.unicodeChar
+    display             inline-block
 
 // 000000000  000  000000000  000      00000000  0000000     0000000   00000000 
 //    000     000     000     000      000       000   000  000   000  000   000
@@ -152,6 +152,8 @@ body
             opacity     1
     &:active
         background-color #f00
+        &.gray
+            background-color #888
         & img
             opacity     1
 
