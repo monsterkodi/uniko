@@ -27,7 +27,7 @@ class Input
     
     text:  -> @plain
     setText: (@plain) -> 
-        @input.innerHTML = @plain
+        @input.innerText = @plain
         fs = parseInt @input.style.fontSize
         while fs > 10 and @input.clientWidth > @view.clientWidth
             fs -=1 

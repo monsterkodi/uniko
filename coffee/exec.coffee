@@ -14,10 +14,17 @@ class Exec
         
         post.on 'exec', @onExec
         
+    unicodeChar: (text) ->
+        
+        if /\d+/.test text
+            return "&##{text};"
+        null
+        
     onExec: (text) =>
         
-        switch text
-            when 'c' then post.emit 'menuAction', 'Clear'
+        switch 
+            when text == 'c'            then post.emit 'menuAction', 'Clear'
+            when @unicodeChar text then post.emit 'sheet', action:'addChar', char:@unicodeChar text
             else
                 post.emit 'sheet', action:'addText', text:text
         post.emit 'menuAction', 'Reset'

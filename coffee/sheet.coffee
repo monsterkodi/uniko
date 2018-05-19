@@ -6,7 +6,7 @@
 0000000   000   000  00000000  00000000     000   
 ###
 
-{ post, elem, log, $, _ } = require 'kxk'
+{ post, elem, last, log, $, _ } = require 'kxk'
 
 class Sheet
 
@@ -17,8 +17,8 @@ class Sheet
      
     clear:          -> @view.innerHTML = ''
     setText: (text) -> @clear(); @addText text
-    addText: (text) -> 
-        @view.appendChild elem class:'sheet greet', text:text
+    addText: (text) -> @view.appendChild elem class:'sheet text', html:text
+    addChar: (char) -> if @view.children.length then last(@view.children).innerHTML += char else @addText char
         
     onSheet: (opt) =>
         
@@ -27,6 +27,7 @@ class Sheet
             when 'clear'   then @clear()
             when 'setText' then @setText opt.text
             when 'addText' then @addText opt.text
+            when 'addChar' then @addChar opt.char
             else
                 log 'onSheet', opt
 

@@ -1,7 +1,7 @@
 name            uniko
 productName     uniko
-version         0.2.0
-description     unicode tool
+version         0.3.1
+description     unicode toy
 main            js/main.js
 repository
                 type  git
@@ -21,5 +21,5 @@ dependencies
                 kxk           ^0.74.0
 devDependencies
                 electron        ^2.0.1
-                electron-packager  ^12.0.2
+                electron-packager  ^12.1.0
                 electron-rebuild  ^1.7.3

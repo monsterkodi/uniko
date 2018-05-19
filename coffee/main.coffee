@@ -134,25 +134,32 @@ watcher = null
 startWatcher = ->
     
     watcher = watch.watch __dirname
+    watcher.add slash.join __dirname, '../package.json'
     watcher.on 'change', onSrcChange
     watcher.on 'error', (err) -> error err
 
-stopWatcher = -> 
+stopWatcher = ->
     
     if watcher?
         watcher.close()
         watcher = null
 
 onSrcChange = (path) ->
-
-    if path == __filename
+    # log 'srcChange', path
+    if path == __filename or slash.samePath path, slash.join __dirname, '../package.json'
         stopWatcher()
         app.exit 0
-        childp.execSync "#{__dirname}/../node_modules/.bin/electron . -w",
-            cwd:      "#{__dirname}/.."
-            encoding: 'utf8'
-            stdio:    'inherit'
-            shell:    true
+        # childp.execSync "#{__dirname}/../node_modules/.bin/electron . -w",
+            # cwd:      "#{__dirname}/.."
+            # encoding: 'utf8'
+            # stdio:    'inherit'
+            # shell:    true
+        childp.spawn "#{__dirname}/../node_modules/.bin/electron", [".", "-w"],
+            cwd:         "#{__dirname}/.."
+            encoding:    'utf8'
+            detached:    true
+            shell:       true
+            windowsHide: true
         process.exit 0
     else
         post.toWins 'reload'
