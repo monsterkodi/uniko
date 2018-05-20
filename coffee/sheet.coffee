@@ -23,16 +23,18 @@ class Sheet
         
         post.on 'sheet', @onSheet
         
-    empty:            -> @view.children.length == 0
-    clear:            -> @view.innerHTML = ''; window.input.focus()
-    setText:  (text)  -> @clear(); @addText text
-    elemForText: (text) -> elem class:'sheet text', html:str text
-    addText:  (text)  -> @view.appendChild @elemForText text
-    insertText: (text,after) -> after.parentNode.insertBefore @elemForText(text), after.nextSibling
-    addChar:  (char)  -> if not @empty() then last(@view.children).innerHTML += spanForChar(char) else @addText spanForChar char
-    backspace:        -> if not @popChar() then log 'backspace text?'
-    addChars: (chars) -> @addText htmlForChars chars.filter (c) -> window.valid.char c
-    addGroup: (group) -> @view.appendChild elem class:'sheet group', html:group
+    empty:                          -> @view.children.length == 0
+    clear:                          -> @view.innerHTML = ''; window.input.focus()
+    backspace:                      -> if not @popChar() then log 'backspace text?'
+    setText:        (text)          -> @clear(); @addText text
+    elemForText:    (text)          -> elem class:'sheet text',  html:str text
+    elemForGroup:   (group)         -> elem class:'sheet group', html:group
+    addChar:        (char)          -> if not @empty() then last(@view.children).innerHTML += spanForChar(char) else @addText spanForChar char
+    addChars:       (chars)         -> @addText htmlForChars chars.filter (c) -> window.valid.char c
+    addText:        (text)          -> @view.appendChild @elemForText text
+    addGroup:       (group)         -> @view.appendChild @elemForGroup group
+    insertText:     (text,after)    -> after.parentNode.insertBefore @elemForText(text), after.nextSibling
+    insertGroup:    (group, before) -> before.parentNode.insertBefore @elemForGroup(group), before
         
     popChar: -> 
         if not @empty() 
@@ -127,6 +129,7 @@ class Sheet
             when 'addText'      then @addText opt.text
             when 'insertText'   then @insertText opt.text, opt.after
             when 'addGroup'     then @addGroup opt.group
+            when 'insertGroup'  then @insertGroup opt.group, opt.before
             when 'addChar'      then @addChar opt.char
             when 'addChars'     then @addChars opt.chars
             when 'fontSize'     then @setFontSize opt.fontSize

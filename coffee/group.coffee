@@ -35,16 +35,25 @@ class Group
     rangesForGroup: (group) -> @groups[group].split ' '
     charsForGroup: (group) -> _.flatten @rangesForGroup(group).map (r) -> rangeToChars r
                 
+    isGroup: (group) -> _.isString @groups[group]
+    
     removeChars: (group, chars) ->
         log 'remove', chars
         @groups[group] = rangesToString charsToRanges @charsForGroup(group).filter (c) -> c not in chars
         noon.save @groupsFile, @groups
             
     expand: (target) ->
-        log 'expand', target.innerHTML
-        post.emit 'sheet', action:'insertText', after:target, text:@htmlForGroup target.innerHTML
+        name = target.innerHTML
+        log 'expand', name, @isGroup name
+        if @isGroup name
+            text = @htmlForGroup name
+            post.emit 'sheet', action:'insertText', after:target, text:text
+        else
+            nextSibling = target.nextSibling
+            for name,value of @groups[name]
+                post.emit 'sheet', action:'insertGroup', before:nextSibling, group:name
         
-    htmlForGroup: (group) -> @rangesForGroup(group).map((r) -> htmlForChars rangeToChars r).join ''
+    htmlForGroup:  (group) -> @rangesForGroup(group).map((r) -> htmlForChars rangeToChars r).join ''
             
     addGroup: (group) ->
         log 'addGroup', group
