@@ -27,9 +27,12 @@ class Sheet
     clear:            -> @view.innerHTML = ''
     setText:  (text)  -> @clear(); @addText text
     addText:  (text)  -> @view.appendChild elem class:'sheet text', html:str(text)
-    addChars: (chars) -> @addText chars.map((c) => @spanForChar(c)).join ''
     addChar:  (char)  -> if not @empty() then last(@view.children).innerHTML += @spanForChar(char) else @addText @spanForChar char
     backspace:        -> if not @popChar() then log 'backspace text?'
+    addChars: (chars) ->
+        valid = chars.filter (c) -> window.valid.char c
+        @addText valid.map((c) => @spanForChar(c)).join ''
+        
     popChar:          -> 
         if not @empty() 
             last(@view.children).innerHTML = stringPop last(@view.children).innerHTML
