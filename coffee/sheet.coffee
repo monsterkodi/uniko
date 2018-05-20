@@ -26,15 +26,22 @@ class Sheet
     empty:                          -> @view.children.length == 0
     clear:                          -> @view.innerHTML = ''; window.input.focus()
     backspace:                      -> if not @popChar() then log 'backspace text?'
-    setText:        (text)          -> @clear(); @addText text
-    elemForText:    (text)          -> elem class:'sheet text',  html:str text
-    elemForGroup:   (group)         -> elem class:'sheet group', html:group
+    # setText:        (text)          -> @clear(); @addText text
     addChar:        (char)          -> if not @empty() then last(@view.children).innerHTML += spanForChar(char) else @addText spanForChar char
     addChars:       (chars)         -> @addText htmlForChars chars.filter (c) -> window.valid.char c
     addText:        (text)          -> @view.appendChild @elemForText text
-    addGroup:       (group)         -> @view.appendChild @elemForGroup group
     insertText:     (text,after)    -> after.parentNode.insertBefore @elemForText(text), after.nextSibling
-    insertGroup:    (group, before) -> before.parentNode.insertBefore @elemForGroup(group), before
+    insertGroup:    (group, parent) -> parent.appendChild @elemForGroup group 
+    elemForText:    (text)          -> elem class:'sheet text',  html:str text
+    elemForGroup:   (group)         -> 
+        groupElem = elem class:'sheet group'
+        groupElem.appendChild elem class:'sheet title', text:str group
+        groupElem
+        
+    addGroup: (opt) -> 
+        groupElem = @elemForGroup opt.group
+        if opt.text then groupElem.appendChild @elemForText opt.text
+        @view.appendChild groupElem
         
     popChar: -> 
         if not @empty() 
@@ -91,7 +98,7 @@ class Sheet
       
     onMouseClick: (event) =>
         
-        if event.target.classList.contains 'group'
+        if event.target.classList.contains 'title'
             if event.target.nextSibling?.classList.contains 'text'
                 event.target.nextSibling.remove()
             else
@@ -125,11 +132,11 @@ class Sheet
         opt ?= {}
         switch opt.action
             when 'clear'        then @clear()
-            when 'setText'      then @setText opt.text
-            when 'addText'      then @addText opt.text
+            # when 'setText'      then @setText opt.text
+            # when 'addText'      then @addText opt.text
             when 'insertText'   then @insertText opt.text, opt.after
-            when 'addGroup'     then @addGroup opt.group
-            when 'insertGroup'  then @insertGroup opt.group, opt.before
+            when 'addGroup'     then @addGroup opt
+            when 'insertGroup'  then @insertGroup opt.group, opt.parent
             when 'addChar'      then @addChar opt.char
             when 'addChars'     then @addChars opt.chars
             when 'fontSize'     then @setFontSize opt.fontSize

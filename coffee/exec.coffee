@@ -6,7 +6,7 @@
 00000000  000   000  00000000   0000000
 ###
 
-{ empty, post, log, _ } = require 'kxk'
+{ empty, post, error, log, _ } = require 'kxk'
 
 class Exec
 
@@ -53,7 +53,8 @@ class Exec
         cmmds = text.split ' '
         for cmmd in cmmds
             if not @execCmmd cmmd
-                post.emit 'sheet', action:'addText', text:cmmd
+                error 'no command?', cmmd
+                # post.emit 'sheet', action:'addText', text:cmmd
                             
     onExec: (text) =>
         

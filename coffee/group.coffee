@@ -49,26 +49,21 @@ class Group
             text = @htmlForGroup name
             post.emit 'sheet', action:'insertText', after:target, text:text
         else
-            nextSibling = target.nextSibling
             for name,value of @groups[name]
-                post.emit 'sheet', action:'insertGroup', before:nextSibling, group:name
+                post.emit 'sheet', action:'insertGroup', parent:target, group:name
         
     htmlForGroup:  (group) -> @rangesForGroup(group).map((r) -> htmlForChars rangeToChars r).join ''
             
-    addGroup: (group) ->
-        log 'addGroup', group
-        post.emit 'sheet', action:'addGroup', group:group
-        post.emit 'sheet', action:'addText',  text:@htmlForGroup group
-            
     addGroups: (names) ->
+        
         names = names.trim().split ' '
         names = [] if names.length == 1 and empty names[0] 
         
         if empty names
             @listGroups()
         else
-            for name in names
-                @addGroup name
+            for group in names
+                post.emit 'sheet', action:'addGroup', group:group, text:@htmlForGroup group
           
     listGroups: ->
         
