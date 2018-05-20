@@ -6,21 +6,14 @@
 00000000  000   000  00000000   0000000
 ###
 
-{ noon, slash, empty, post, watch, error, log, _ } = require 'kxk'
+{ empty, post, log, _ } = require 'kxk'
 
 class Exec
 
     constructor: ->
         
         post.on 'exec', @onExec
-        
-        @groupsFile = slash.join __dirname, '../bin/groups.noon'
-        @groups = noon.load @groupsFile
-
-        watcher = watch.watch @groupsFile
-        watcher.on 'change', => @groups = noon.load @groupsFile
-        watcher.on 'error', (err) -> error err
-        
+                
     addChars: (list) -> 
         
         post.emit 'sheet', action:'addChars', chars:list
@@ -61,30 +54,7 @@ class Exec
         for cmmd in cmmds
             if not @execCmmd cmmd
                 post.emit 'sheet', action:'addText', text:cmmd
-            
-    showGroup: (name) ->
-        
-        ranges = @groups[name].split ' '
-        post.emit 'sheet', action:'addText', text:name
-        post.emit 'sheet', action:'addText', text:''
-        for range in ranges
-            post.emit 'sheet', action:'addRange', range:range
-                
-    showGroups: (names) ->
-        names = names.trim().split ' '
-        names = [] if names.length == 1 and empty names[0] 
-        
-        if empty names 
-            @listGroups()
-        else
-            for name in names
-                @showGroup name
-          
-    listGroups: ->
-        
-        for name,v of @groups
-            post.emit 'sheet', action:'addText', text:name
-                
+                            
     onExec: (text) =>
         
         switch 
@@ -92,7 +62,7 @@ class Exec
             when text == 'd'       then post.emit 'sheet', action:'backspace'
             when text == 'm'       then post.emit 'sheet', action:'monospace'
             when text == 's'       then window.valid.saveRanges()
-            when text.startsWith 'g' then @showGroups text.substr 1
+            when text.startsWith 'g' then post.emit 'group', action:'addGroups', groups:text.substr 1
             when text.startsWith 'i' then window.valid.addRange text.substr 1
             when /^f\d+/.test text then post.emit 'sheet', action:'fontSize', fontSize:parseInt text.substr 1
             else

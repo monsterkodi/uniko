@@ -11,6 +11,7 @@
 Exec      = require './exec'
 Input     = require './input'
 Parse     = require './parse'
+Group     = require './group'
 Valid     = require './valid'
 Sheet     = require './sheet'
 Menu      = require './menu'
@@ -113,6 +114,7 @@ scheme.set prefs.get 'scheme', 'dark'
 window.titlebar = new Titlebar 
 window.input    = new Input
 window.parse    = new Parse
+window.group    = new Group
 window.valid    = new Valid
 window.sheet    = new Sheet
 window.exec     = new Exec

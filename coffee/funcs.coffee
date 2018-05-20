@@ -45,5 +45,9 @@ class Funcs
     @stringPop: (s) ->
     
         s.slice 0, s.length - 1   
+
+    @spanForChar: (char) -> "<span>&##{char};</span>"
+        
+    @htmlForChars: (chars) -> chars.map((c) -> Funcs.spanForChar(c)).join ''
         
 module.exports = Funcs
