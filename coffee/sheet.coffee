@@ -8,7 +8,7 @@
 
 { post, elem, last, prefs, str, log, $, _ } = require 'kxk'
 
-{ stringToChars, stringPop, stringToRanges, rangesToString, validChar } = require './funcs'
+{ stringToChars, stringPop, stringToRanges, rangesToString, validChar, rangeToChars } = require './funcs'
 
 class Sheet
 
@@ -23,15 +23,17 @@ class Sheet
     
     spanForChar: (char) -> "<span>&##{char};</span>"
         
+    htmlForChars: (chars) -> chars.map((c) => @spanForChar(c)).join ''
+    
     empty:            -> @view.children.length == 0
     clear:            -> @view.innerHTML = ''
     setText:  (text)  -> @clear(); @addText text
     addText:  (text)  -> @view.appendChild elem class:'sheet text', html:str(text)
     addChar:  (char)  -> if not @empty() then last(@view.children).innerHTML += @spanForChar(char) else @addText @spanForChar char
     backspace:        -> if not @popChar() then log 'backspace text?'
-    addChars: (chars) ->
-        valid = chars.filter (c) -> window.valid.char c
-        @addText valid.map((c) => @spanForChar(c)).join ''
+    addChars: (chars) -> @addText @htmlForChars chars.filter (c) -> window.valid.char c
+        
+    addRange: (range) -> last(@view.children).innerHTML += @htmlForChars rangeToChars range
         
     popChar:          -> 
         if not @empty() 
@@ -61,17 +63,17 @@ class Sheet
     onWheel: (event) => 
         if event.ctrlKey then @changeFontSize parseInt -event.deltaY/100
          
-    # 00     00   0000000   000   000   0000000  00000000        00     00   0000000   000   000  00000000  
-    # 000   000  000   000  000   000  000       000             000   000  000   000  000   000  000       
-    # 000000000  000   000  000   000  0000000   0000000         000000000  000   000   000 000   0000000   
-    # 000 0 000  000   000  000   000       000  000             000 0 000  000   000     000     000       
-    # 000   000   0000000    0000000   0000000   00000000        000   000   0000000       0      00000000  
+    # 00     00   0000000   000   000   0000000  00000000
+    # 000   000  000   000  000   000  000       000     
+    # 000000000  000   000  000   000  0000000   0000000 
+    # 000 0 000  000   000  000   000       000  000     
+    # 000   000   0000000    0000000   0000000   00000000
     
     onMouseMove: (event) =>
         
         selection = document.getSelection().toString()
         
-        if selection.length
+        if selection.length and not window.input.hasSelection()
             # log 'win', selection.length, selection
             post.emit 'input', action:'setText', text:rangesToString stringToRanges selection
             return
@@ -96,6 +98,7 @@ class Sheet
             when 'addText'   then @addText opt.text
             when 'addChar'   then @addChar opt.char
             when 'addChars'  then @addChars opt.chars
+            when 'addRange'  then @addRange opt.range
             when 'fontSize'  then @setFontSize opt.fontSize
             when 'backspace' then @backspace()
             when 'monospace' then @monospace()

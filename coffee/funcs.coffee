@@ -6,7 +6,7 @@
 000        0000000   000   000   0000000  0000000 
 ###
 
-{ last, elem, log, $ } = require 'kxk'
+{ last, elem, log, $, _ } = require 'kxk'
 
 class Funcs
 
@@ -18,12 +18,16 @@ class Funcs
                 l[1] += 1
             else
                 rngs.push [char, 0]
-        # log chars, rngs
         rngs
     
     @stringToRanges: (s) -> Funcs.charsToRanges Funcs.stringToChars s 
         
     @stringToRange: (s) -> s.split('+').map (n) -> parseInt n
+    
+    @rangeToChars: (r) -> 
+            
+        if _.isString(r) then r = Funcs.stringToRange r
+        [r[0]..r[0]+r[1]]
     
     @rangesToString: (rngs) -> s = rngs.map((r) -> "#{r[0]}+#{r[1]}").join ' '
 

@@ -77,7 +77,8 @@ class Valid
         noon.save @rangesFile, @invalidRanges
             
     char: (char) -> 
-    
+        # return true
+        return false if char >= 250000
         for r in @invalidRanges
             continue if r[0]+r[1] < char
             return false if char >= r[0] and char <= r[0]+r[1]

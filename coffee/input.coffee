@@ -19,9 +19,12 @@ class Input
         @view.addEventListener 'click', => @input.focus()
         @input.addEventListener 'input',  @onInputChanged
         @input.addEventListener 'change', @execute
+        @input.addEventListener 'blur',   @onBlur
         
         post.on 'input', @onInput
     
+    onBlur: (event) => @clearSelection()
+        
     onInput: (opt) =>
         
         opt ?= {}
@@ -34,6 +37,9 @@ class Input
         @plain = @input.value
         @sizeInput()
          
+    hasSelection:     -> @input.selectionEnd - @input.selectionStart != 0
+    clearSelection:   -> @input.setSelectionRange @input.selectionEnd, @input.selectionEnd
+    
     popChar:    (txt) -> txt.substr 0, txt.length-1
     backspace:        -> @setText @popChar @text()
     complete:         -> log 'complete'

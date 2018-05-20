@@ -6,14 +6,21 @@
 00000000  000   000  00000000   0000000
 ###
 
-{ post, log, _ } = require 'kxk'
+{ noon, slash, empty, post, watch, error, log, _ } = require 'kxk'
 
 class Exec
 
     constructor: ->
         
         post.on 'exec', @onExec
+        
+        @groupsFile = slash.join __dirname, '../bin/groups.noon'
+        @groups = noon.load @groupsFile
 
+        watcher = watch.watch @groupsFile
+        watcher.on 'change', => @groups = noon.load @groupsFile
+        watcher.on 'error', (err) -> error err
+        
     addChars: (list) -> 
         
         post.emit 'sheet', action:'addChars', chars:list
@@ -48,12 +55,30 @@ class Exec
             [a,b] = text.slice(1).split('+').map (s) -> parseInt s, 16
             return @addChars [a..a+b]
          
-    execCmmds: (cmmds) ->
+    execCmmds: (text) ->
         
+        cmmds = text.split ' '
         for cmmd in cmmds
             if not @execCmmd cmmd
                 post.emit 'sheet', action:'addText', text:cmmd
             
+    showGroup: (name) ->
+        
+        ranges = @groups[name].split ' '
+        post.emit 'sheet', action:'addText', text:name
+        post.emit 'sheet', action:'addText', text:''
+        for range in ranges
+            post.emit 'sheet', action:'addRange', range:range
+                
+    showGroups: (names) ->
+        names = names.trim().split ' '
+        names = [] if names.length == 1 and empty names[0] 
+        
+        if empty names then names = _.keys @groups
+        for name in names
+            log 'group', name, @groups[name]
+            @showGroup name
+                
     onExec: (text) =>
         
         switch 
@@ -61,10 +86,11 @@ class Exec
             when text == 'd'       then post.emit 'sheet', action:'backspace'
             when text == 'm'       then post.emit 'sheet', action:'monospace'
             when text == 's'       then window.valid.saveRanges()
+            when text.startsWith 'g' then @showGroups text.substr 1
             when text.startsWith 'i' then window.valid.addRange text.substr 1
             when /^f\d+/.test text then post.emit 'sheet', action:'fontSize', fontSize:parseInt text.substr 1
             else
-                @execCmmds text.split ' '
+                @execCmmds text
                 
         post.emit 'menuAction', 'Reset'
 
