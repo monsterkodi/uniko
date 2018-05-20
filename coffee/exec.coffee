@@ -74,10 +74,16 @@ class Exec
         names = names.trim().split ' '
         names = [] if names.length == 1 and empty names[0] 
         
-        if empty names then names = _.keys @groups
-        for name in names
-            log 'group', name, @groups[name]
-            @showGroup name
+        if empty names 
+            @listGroups()
+        else
+            for name in names
+                @showGroup name
+          
+    listGroups: ->
+        
+        for name,v of @groups
+            post.emit 'sheet', action:'addText', text:name
                 
     onExec: (text) =>
         
