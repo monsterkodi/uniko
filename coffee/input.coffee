@@ -14,14 +14,23 @@ class Input
         
         @view  = $ "#input"
         @plain = ''
-        @input = elem 'input', type:'text', class:'input-text', style: 'font-size: 60px', autofocus:true, size:1
+        @input = elem 'input', type:'input', class:'input-text', style: 'font-size: 60px', autofocus:true, size:1
         @view.appendChild @input
         @view.addEventListener 'click', => @input.focus()
-        
-        @input.addEventListener 'input',  @onInput
+        @input.addEventListener 'input',  @onInputChanged
         @input.addEventListener 'change', @execute
         
-    onInput: => 
+        post.on 'input', @onInput
+    
+    onInput: (opt) =>
+        
+        opt ?= {}
+        switch opt.action
+            when 'setText' then @setText opt.text
+            else 
+                log 'onInput', opt
+        
+    onInputChanged: => 
         @plain = @input.value
         @sizeInput()
          
@@ -31,9 +40,7 @@ class Input
     appendText: (txt) -> @setText @text() + txt
     textLength:       -> @text().length
     clear:            -> @setText ''
-    execute:          => 
-        if document.activeElement == @input
-            post.emit 'exec', @text()
+    execute:          => if document.activeElement == @input then post.emit 'exec', @text()
     
     text:  -> @plain
     setText: (@plain) -> 
@@ -41,15 +48,18 @@ class Input
         @sizeInput()
         
     sizeInput: ->
-        @input.setAttribute 'size', Math.max 1, str parseInt @plain.length+1
+        
+        @input.setAttribute 'size', str Math.max 1, @plain.length+1
         fs = parseInt @input.style.fontSize
-        while fs > 4 and @input.clientWidth > @view.clientWidth-60
+        while fs > 2 and @input.clientWidth > @view.clientWidth-60
             fs -=1 
+            @input.setAttribute 'rows', '2'
             @input.style.fontSize = "#{fs}px"
         while fs < 60 and @input.clientWidth < @view.clientWidth-60
             fs +=1 
             @input.style.fontSize = "#{fs}px"
-        post.emit 'input', @plain
+                        
+        post.emit 'inputChanged', @plain
         
     # 000   000  00000000  000   000
     # 000  000   000        000 000 
@@ -60,7 +70,8 @@ class Input
     globalModKeyComboCharEvent: (mod, key, combo, char, event) ->
         
         switch key
-            when 'tab'       then return @complete()
+            when 'tab' then return @complete()
+            when 'enter' then return @execute()
         # log "unhandled mod:#{mod} key:#{key} combo:#{combo} char:#{char}"
         'unhandled'
     

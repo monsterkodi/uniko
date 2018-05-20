@@ -6,8 +6,40 @@
 000        0000000   000   000   0000000  0000000 
 ###
 
+{ last, elem, log, $ } = require 'kxk'
+
 class Funcs
 
-    constructor: () ->
+    @charsToRanges: (chars) ->
+        rngs = []
+        for char in chars
+            l = last rngs 
+            if l and l[0] + l[1] + 1 == char
+                l[1] += 1
+            else
+                rngs.push [char, 0]
+        # log chars, rngs
+        rngs
+    
+    @stringToRanges: (s) -> Funcs.charsToRanges Funcs.stringToChars s 
+        
+    @stringToRange: (s) -> s.split('+').map (n) -> parseInt n
+    
+    @rangesToString: (rngs) -> s = rngs.map((r) -> "#{r[0]}+#{r[1]}").join ' '
 
+    @stringToChars: (s) -> 
+        
+        chars = []
+        i = 0
+        while cp = s.codePointAt i
+            chars.push cp
+            i++
+            if cp > 65535
+                i++
+        chars
+        
+    @stringPop: (s) ->
+    
+        s.slice 0, s.length - 1   
+        
 module.exports = Funcs

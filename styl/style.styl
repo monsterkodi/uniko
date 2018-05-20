@@ -70,11 +70,17 @@ body
     text-align          left
     padding-left        10px
     padding-right       10px
-    font-size           60px
     -webkit-user-select auto
-    font-family         fontMono
-    white-space         wrap
+    font-family         "Arial Unicode MS"
     
+.test-char
+    display             inline-block
+    font-size           6px
+    font-family         "Arial Unicode MS"
+    color               #fff
+    background-color    #000
+    pointer-events      none
+        
 //  0000000  000   000  00000000  00000000  000000000  
 // 000       000   000  000       000          000     
 // 0000000   000000000  0000000   0000000      000     
@@ -90,7 +96,7 @@ body
     pointer-events      all
     font-family         "Arial Unicode MS"
 
-.unicodeChar
+#sheet .sheet.text span
     display             inline-block
 
 // 000000000  000  000000000  000      00000000  0000000     0000000   00000000 

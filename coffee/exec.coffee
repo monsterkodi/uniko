@@ -19,15 +19,18 @@ class Exec
         post.emit 'sheet', action:'addChars', chars:list
         true
         
-    unicodeChar: (text) ->
+    addChar: (char) ->
+        
+        post.emit 'sheet', action:'addChar', char:char
+        true
+        
+    execCmmd: (text) ->
         
         if /^\d+$/.test text
-            return post.emit 'sheet', action:'addChar', char:parseInt text
+            return @addChar parseInt text
             
-        else if /^\+[\da-fA-F]+$/.test text
-            return post.emit 'sheet', action:'addChar', char:parseInt text.slice(1), 16
-        
-    unicodeList: (text) ->
+        if /^\+[\da-fA-F]+$/.test text
+            return @addChar parseInt text.slice(1), 16
         
         if /^\d+-\d+$/.test text
             [a,b] = text.split('-').map (s) -> parseInt s
@@ -44,6 +47,12 @@ class Exec
         if /^\+[\da-fA-F]+\+[\da-fA-F]+$/.test text
             [a,b] = text.slice(1).split('+').map (s) -> parseInt s, 16
             return @addChars [a..a+b]
+         
+    execCmmds: (cmmds) ->
+        
+        for cmmd in cmmds
+            if not @execCmmd cmmd
+                post.emit 'sheet', action:'addText', text:cmmd
             
     onExec: (text) =>
         
@@ -51,11 +60,11 @@ class Exec
             when text == 'c'       then post.emit 'menuAction', 'Clear'
             when text == 'd'       then post.emit 'sheet', action:'backspace'
             when text == 'm'       then post.emit 'sheet', action:'monospace'
+            when text == 's'       then window.valid.saveRanges()
+            when text.startsWith 'i' then window.valid.addRange text.substr 1
             when /^f\d+/.test text then post.emit 'sheet', action:'fontSize', fontSize:parseInt text.substr 1
-            when @unicodeChar text then return
-            when @unicodeList text then return
             else
-                post.emit 'sheet', action:'addText', text:text
+                @execCmmds text.split ' '
                 
         post.emit 'menuAction', 'Reset'
 

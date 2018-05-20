@@ -12,10 +12,10 @@ class Parse
 
     constructor: () ->
         
-        post.on 'input', @onInput
+        post.on 'inputChanged', @onInput
         
     onInput: (text) =>
         
-        log 'Parse.inInput', text
+        # log 'Parse.inInput', text
 
 module.exports = Parse

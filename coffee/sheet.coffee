@@ -8,9 +8,7 @@
 
 { post, elem, last, prefs, str, log, $, _ } = require 'kxk'
 
-class html
-    
-    @pop: (text) -> text.slice 0, text.length - 1
+{ stringToChars, stringPop, stringToRanges, rangesToString, validChar } = require './funcs'
 
 class Sheet
 
@@ -19,11 +17,11 @@ class Sheet
         @view = $ "#sheet"
         @setFontSize prefs.get 'sheet:fontSize', 60
         @view.addEventListener 'wheel', @onWheel
+        @view.addEventListener 'mousemove', @onMouseMove
+        
         post.on 'sheet', @onSheet
     
-    spanForChar: (char) -> 
-        log "spanForChar #{char}"
-        "<span class=\"unicodeChar\">&##{char};</span>"
+    spanForChar: (char) -> "<span>&##{char};</span>"
         
     empty:            -> @view.children.length == 0
     clear:            -> @view.innerHTML = ''
@@ -34,7 +32,7 @@ class Sheet
     backspace:        -> if not @popChar() then log 'backspace text?'
     popChar:          -> 
         if not @empty() 
-            last(@view.children).innerHTML = html.pop last(@view.children).innerHTML
+            last(@view.children).innerHTML = stringPop last(@view.children).innerHTML
             true
         false
 
@@ -59,6 +57,26 @@ class Sheet
         
     onWheel: (event) => 
         if event.ctrlKey then @changeFontSize parseInt -event.deltaY/100
+         
+    # 00     00   0000000   000   000   0000000  00000000        00     00   0000000   000   000  00000000  
+    # 000   000  000   000  000   000  000       000             000   000  000   000  000   000  000       
+    # 000000000  000   000  000   000  0000000   0000000         000000000  000   000   000 000   0000000   
+    # 000 0 000  000   000  000   000       000  000             000 0 000  000   000     000     000       
+    # 000   000   0000000    0000000   0000000   00000000        000   000   0000000       0      00000000  
+    
+    onMouseMove: (event) =>
+        
+        selection = document.getSelection().toString()
+        
+        if selection.length
+            # log 'win', selection.length, selection
+            post.emit 'input', action:'setText', text:rangesToString stringToRanges selection
+            return
+            
+        t = event.target.innerText
+        if t.length <= 2 and t.codePointAt 0 
+            if not window.valid.char t.codePointAt 0 
+                log "invalid #{t.codePointAt 0}"
             
     #  0000000   000   000   0000000  000   000  00000000  00000000  000000000  
     # 000   000  0000  000  000       000   000  000       000          000     

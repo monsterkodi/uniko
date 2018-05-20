@@ -3,3 +3,4 @@ Icon?
 package.json
 *-x64
 js
+bin/*.json
