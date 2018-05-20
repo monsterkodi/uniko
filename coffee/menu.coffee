@@ -27,11 +27,24 @@ class Menu
             ,
                 text:   ''
             ,
+                text:   'Save ...',                     accel:  'ctrl+s'
+            ,
                 text:   'Clear',                        accel:  'ctrl+k'
             ,
                 text:   ''
             ,
                 text:   'Quit',                         accel:  'ctrl+q'
+            ]
+        ,
+            # 00000000  0000000    000  000000000  
+            # 000       000   000  000     000     
+            # 0000000   000   000  000     000     
+            # 000       000   000  000     000     
+            # 00000000  0000000    000     000     
+            
+            text: 'Edit'
+            menu: [
+                text:   'Remove',                       accel:  'ctrl+delete'
             ]
         ,
             # 000   000  000  000   000  0000000     0000000   000   000

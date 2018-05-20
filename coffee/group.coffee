@@ -8,7 +8,7 @@
 
 { post, watch, noon, slash, empty, error, log, _ } = require 'kxk'
 
-{ spanForChar, htmlForChars, rangeToChars } = require './funcs'
+{ spanForChar, htmlForChars, rangeToChars, charsToRanges, rangesToString } = require './funcs'
 
 class Group
 
@@ -17,26 +17,34 @@ class Group
         @groupsFile = slash.join __dirname, '../bin/groups.noon'
         @groups = noon.load @groupsFile
 
-        watcher = watch.watch @groupsFile
-        watcher.on 'change', => @groups = noon.load @groupsFile
-        watcher.on 'error', (err) -> error err
+        @watcher = watch.watch @groupsFile
+        @watcher.on 'change', => @groups = noon.load @groupsFile
+        @watcher.on 'error', (err) -> error err
         
         post.on 'group', @onGroup
 
     onGroup: (opt) =>
-        log 'onGroup', opt
         opt ?= {}
         switch opt.action
-            when 'addGroups' then @addGroups opt.groups
-            when 'expand'    then @expand opt.target
-        
+            when 'removeChars'  then @removeChars opt.group, opt.chars
+            when 'addGroups'    then @addGroups opt.groups
+            when 'expand'       then @expand opt.target
+            else
+                log 'onGroup', opt
+
+    rangesForGroup: (group) -> @groups[group].split ' '
+    charsForGroup: (group) -> _.flatten @rangesForGroup(group).map (r) -> rangeToChars r
+                
+    removeChars: (group, chars) ->
+        log 'remove', chars
+        @groups[group] = rangesToString charsToRanges @charsForGroup(group).filter (c) -> c not in chars
+        noon.save @groupsFile, @groups
+            
     expand: (target) ->
         log 'expand', target.innerHTML
         post.emit 'sheet', action:'insertText', after:target, text:@htmlForGroup target.innerHTML
         
-    htmlForGroup: (name) ->
-        ranges = @groups[name].split ' '
-        ranges.map((r) -> htmlForChars rangeToChars r).join ''
+    htmlForGroup: (group) -> @rangesForGroup(group).map((r) -> htmlForChars rangeToChars r).join ''
             
     addGroup: (name) ->
         

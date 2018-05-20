@@ -6,7 +6,7 @@
 0000000   000   000  00000000  00000000     000   
 ###
 
-{ post, elem, last, prefs, str, log, $, _ } = require 'kxk'
+{ post, prefs, elem, last, empty, str, log, $, _ } = require 'kxk'
 
 { stringToChars, stringPop, stringToRanges, rangesToString, 
   validChar, rangeToChars, spanForChar, htmlForChars } = require './funcs'
@@ -24,7 +24,7 @@ class Sheet
         post.on 'sheet', @onSheet
         
     empty:            -> @view.children.length == 0
-    clear:            -> @view.innerHTML = ''
+    clear:            -> @view.innerHTML = ''; window.input.focus()
     setText:  (text)  -> @clear(); @addText text
     elemForText: (text) -> elem class:'sheet text', html:str text
     addText:  (text)  -> @view.appendChild @elemForText text
@@ -68,12 +68,17 @@ class Sheet
     # 000 0 000  000   000  000   000       000  000     
     # 000   000   0000000    0000000   0000000   00000000
     
-    onMouseMove: (event) =>
+    currentSelection: ->
         
         selection = document.getSelection().toString()
-        
         if selection.length and not window.input.hasSelection()
-            # log 'win', selection.length, selection
+            return selection
+        ''
+    
+    onMouseMove: (event) =>
+        
+        selection = @currentSelection()
+        if not empty selection
             post.emit 'input', action:'setText', text:rangesToString stringToRanges selection
             return
             
@@ -91,7 +96,22 @@ class Sheet
                 post.emit 'group', action:'expand', target:event.target
         else
             log 'click', event.target.className
-                
+       
+    remove: ->
+        
+        if selection = @currentSelection()
+            if document.getSelection().rangeCount
+                range = document.getSelection().getRangeAt(0)
+                ancestor = range.commonAncestorContainer
+                clist = ancestor.classList
+                if not clist? and selection.length <= 2
+                    ancestor = ancestor.parentNode.parentNode
+                    clist = ancestor.classList
+                if clist.contains('sheet') and clist.contains('text')
+                    group = ancestor.previousSibling.innerHTML
+                    post.emit 'group', action:'removeChars', group:group, chars:stringToChars @currentSelection()
+                    document.getSelection().deleteFromDocument()
+            
     #  0000000   000   000   0000000  000   000  00000000  00000000  000000000  
     # 000   000  0000  000  000       000   000  000       000          000     
     # 000   000  000 0 000  0000000   000000000  0000000   0000000      000     

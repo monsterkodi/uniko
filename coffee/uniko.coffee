@@ -44,6 +44,10 @@ $("#main").addEventListener "contextmenu", (event) ->
         combo:  'ctrl+k'
         cb:     -> post.emit 'menuAction', 'Clear'
     ,
+        text:   'Remove'
+        combo:  'delete'
+        cb:     -> post.emit 'menuAction', 'Remove'
+    ,
         text:   'Toggle Menu'
         combo:  'alt+m'
         cb:     -> post.emit 'menuAction', 'Toggle Menu'
@@ -66,17 +70,18 @@ menuAction = (name, args) ->
 
     switch name
 
-        when 'Toggle Scheme'    then return scheme.toggle()
-        when 'Toggle Menu'      then return window.menu.toggle()
-        when 'Show Menu'        then return window.menu.show()
-        when 'Hide Menu'        then return window.menu.hide()
-        when 'DevTools'         then return win.webContents.openDevTools()
-        when 'Reload'           then return win.webContents.reloadIgnoringCache()
-        when 'Close Window'     then return win.close()
-        when 'Reset'            then return window.input.clear()
-        when 'Clear'            then return window.sheet.clear()
-        when 'Minimize'         then return win.minimize()
-        when 'Maximize'         then if win.isMaximized() then win.unmaximize() else win.maximize()        
+        when 'Toggle Scheme'        then return scheme.toggle()
+        when 'Toggle Menu'          then return window.menu.toggle()
+        when 'Show Menu'            then return window.menu.show()
+        when 'Hide Menu'            then return window.menu.hide()
+        when 'DevTools'             then return win.webContents.openDevTools()
+        when 'Reload'               then return win.webContents.reloadIgnoringCache()
+        when 'Close Window'         then return win.close()
+        when 'Reset'                then return window.input.clear()
+        when 'Clear'                then return window.sheet.clear()
+        when 'Remove'               then return window.sheet.remove()
+        when 'Minimize'             then return win.minimize()
+        when 'Maximize'             then if win.isMaximized() then win.unmaximize() else win.maximize()        
         when 'Font Size Reset'      then return window.sheet.resetFontSize()
         when 'Font Size Increase'   then return window.sheet.changeFontSize +1
         when 'Font Size Decrease'   then return window.sheet.changeFontSize -1
@@ -99,15 +104,22 @@ document.onkeydown = (event) ->
 
     return if not combo
 
+    switch combo
+        when 'delete' 
+            if not window.input.hasFocus() 
+                return stopEvent event, menuAction 'Remove'
+    
     return stopEvent(event) if 'unhandled' != window.input.globalModKeyComboCharEvent mod, key, combo, char, event
     return stopEvent(event) if 'unhandled' != window.menu.globalModKeyComboEvent mod, key, combo, event
     
+    # log combo
+    
     switch combo
-        when 'command+i', 'ctrl+i', 'alt+i' then return scheme.toggle()
-        when 'ctrl+='                       then return menuAction 'Font Size Increase'
-        when 'ctrl+-'                       then return menuAction 'Font Size Decrease'
-        when 'ctrl+0'                       then return menuAction 'Font Size Reset'
-        when 'esc'                               then menuAction 'Reset'
+        when 'command+i', 'ctrl+i', 'alt+i' then scheme.toggle()
+        when 'ctrl+='                       then menuAction 'Font Size Increase'
+        when 'ctrl+-'                       then menuAction 'Font Size Decrease'
+        when 'ctrl+0'                       then menuAction 'Font Size Reset'
+        when 'esc'                          then menuAction 'Reset'
 
 prefs.init()
 scheme.set prefs.get 'scheme', 'dark'

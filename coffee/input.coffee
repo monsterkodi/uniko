@@ -36,7 +36,9 @@ class Input
     onInputChanged: => 
         @plain = @input.value
         @sizeInput()
-         
+        
+    focus:            -> @input.focus()
+    hasFocus:         -> document.activeElement == @input
     hasSelection:     -> @input.selectionEnd - @input.selectionStart != 0
     clearSelection:   -> @input.setSelectionRange @input.selectionEnd, @input.selectionEnd
     
@@ -45,8 +47,8 @@ class Input
     complete:         -> log 'complete'
     appendText: (txt) -> @setText @text() + txt
     textLength:       -> @text().length
-    clear:            -> @setText ''
-    execute:          => if document.activeElement == @input then post.emit 'exec', @text()
+    clear:            -> @setText '' ; @focus()
+    execute:          => if @hasFocus() then post.emit 'exec', @text()
     
     text:  -> @plain
     setText: (@plain) -> 
