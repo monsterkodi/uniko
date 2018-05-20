@@ -46,16 +46,16 @@ class Group
         
     htmlForGroup: (group) -> @rangesForGroup(group).map((r) -> htmlForChars rangeToChars r).join ''
             
-    addGroup: (name) ->
-        
-        post.emit 'sheet', action:'addGroup', group:name
-        post.emit 'sheet', action:'addText',  text:@htmlForGroup name
+    addGroup: (group) ->
+        log 'addGroup', group
+        post.emit 'sheet', action:'addGroup', group:group
+        post.emit 'sheet', action:'addText',  text:@htmlForGroup group
             
     addGroups: (names) ->
         names = names.trim().split ' '
         names = [] if names.length == 1 and empty names[0] 
         
-        if empty names 
+        if empty names
             @listGroups()
         else
             for name in names
