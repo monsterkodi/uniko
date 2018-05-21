@@ -6,7 +6,7 @@
 0000000   000   000  00000000  00000000     000   
 ###
 
-{ post, prefs, elem, last, empty, str, log, $, _ } = require 'kxk'
+{ post, prefs, elem, last, empty, str, pos, log, $, _ } = require 'kxk'
 
 { stringToChars, stringPop, stringToRanges, rangesToString, 
   validChar, rangeToChars, spanForChar, htmlForChars } = require './funcs'
@@ -17,10 +17,12 @@ class Sheet
         
         @view = $ "#sheet"
         @setFontSize prefs.get 'sheet:fontSize', 60
-        @view.addEventListener 'wheel', @onWheel
+        @view.addEventListener 'wheel',     @onWheel
         @view.addEventListener 'mousemove', @onMouseMove
-        @view.addEventListener 'click', @onMouseClick
-        
+        @view.addEventListener 'click',     @onMouseClick
+        @view.addEventListener 'dragover',  @onDragOver
+        @view.addEventListener 'drop',      @onDrop
+
         post.on 'sheet', @onSheet
         
     empty:                          -> @view.children.length == 0
@@ -43,8 +45,8 @@ class Sheet
             nameElem.appendChild elem 'span', text:name+' '
         nameElem
 
-    insertGroup:    (opt)           -> opt.parent.appendChild @elemForGroup opt.group 
-    insertText:     (opt)           -> opt.parent.appendChild @elemForText opt.text
+    insertGroup: (opt) -> opt.parent.appendChild @elemForGroup opt.group 
+    insertText:  (opt) -> opt.parent.appendChild @elemForText opt.text
         
     addGroup: (opt) -> 
         @view.appendChild @elemForGroup opt.group
@@ -56,6 +58,44 @@ class Sheet
             true
         false
 
+    # 0000000    00000000    0000000    0000000   
+    # 000   000  000   000  000   000  000        
+    # 000   000  0000000    000000000  000  0000  
+    # 000   000  000   000  000   000  000   000  
+    # 0000000    000   000  000   000   0000000   
+    
+    onDragOver: (event) => 
+    
+        @clearDropTarget event
+        
+        eventPos = pos event 
+        dropElem = document.elementFromPoint eventPos.x, eventPos.y
+        if dropElem.parentNode.classList.contains 'text'
+            @dropTarget = dropElem
+            @dropTarget.style.borderLeft = '1px solid white'
+        else
+            groupElem = elem.upElem dropElem, class:'group'
+            if window.group.isExpanded groupElem
+                @dropTarget = groupElem.lastChild.lastChild
+                @dropTarget.style.borderRight = '1px solid white'
+    
+    onDrop: (event) =>
+        
+        data = event.dataTransfer.getData "text"
+        if @dropTarget?
+            log 'onDrop', data, @dropTarget?, @dropTarget?.innerText
+            
+        @clearDropTarget event
+
+    clearDropTarget: (event) ->
+        
+        event.preventDefault()
+        
+        @dropTarget?.style.borderLeft = ''
+        @dropTarget?.style.borderRight = ''
+        
+        delete @dropTarget
+        
     # 00000000   0000000   000   000  000000000   0000000  000  0000000  00000000  
     # 000       000   000  0000  000     000     000       000     000   000       
     # 000000    000   000  000 0 000     000     0000000   000    000    0000000   
@@ -95,7 +135,8 @@ class Sheet
         
         selection = @currentSelection()
         if not empty selection
-            post.emit 'input', action:'setText', text:rangesToString stringToRanges selection
+            if event.ctrlKey
+                post.emit 'input', action:'setText', text:rangesToString stringToRanges selection
             return
             
         t = event.target.innerText

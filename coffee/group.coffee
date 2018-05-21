@@ -56,7 +56,17 @@ class Group
     charsForGroup:  (group) -> _.flatten @rangesForGroup(group).map (r) -> rangeToChars r
     
     removeChars: (opt) ->
-        log 'removeChars', opt
+        # log 'removeChars', opt
+        group = opt.group
+        chars = opt.chars
+        index = opt.index
+        name = last group.split ' '
+        groupChars = @charsForGroup group 
+        groupChars.splice index, 0, chars
+        @getParent(group)[name] = rangesToString charsToRanges groupChars
+        noon.save @groupsFile, @groups
+        
+    insertChars: (opt) ->
         group = opt.group
         chars = opt.chars
         name = last group.split ' '
