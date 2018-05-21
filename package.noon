@@ -19,7 +19,7 @@ bugs
 dependencies
                 coffeescript  ^2.3.0
                 html2canvas   ^1.0.0-alpha.12
-                kxk           ^0.74.0
+                kxk           ^0.76.0
 devDependencies
                 electron        ^2.0.1
                 electron-packager  ^12.1.0

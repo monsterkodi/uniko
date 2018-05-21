@@ -30,7 +30,18 @@ class Sheet
     addChars:       (chars)         -> @addText htmlForChars chars.filter (c) -> window.valid.char c
     addText:        (text)          -> @view.appendChild @elemForText text
     elemForText:    (text)          -> elem class:'text',  html:str text
-    elemForGroup:   (group)         -> elem class:'group', html:str group
+    elemForGroup:   (group)         -> 
+    
+        groupElem = elem class:'group'
+        groupElem.appendChild @elemForName group
+        groupElem
+        
+    elemForName: (group) -> 
+        
+        nameElem = elem class:'name'
+        for name in group.split ' '
+            nameElem.appendChild elem 'span', text:name+' '
+        nameElem
 
     insertGroup:    (opt)           -> opt.parent.appendChild @elemForGroup opt.group 
     insertText:     (opt)           -> opt.parent.appendChild @elemForText opt.text
@@ -93,11 +104,14 @@ class Sheet
                 log "invalid #{t.codePointAt 0}"
       
     onMouseClick: (event) =>
+
+        nameElem = elem.upElem event.target, class:'name'
+        log 'nameElem', nameElem?, nameElem?.className
         
-        if event.target.classList.contains 'group'
-            post.emit 'group', action:'toggle', target:event.target
+        if nameElem
+            post.emit 'group', action:'toggle', target:nameElem
         else
-            log 'click', event.target.className
+            log "click className: '#{event.target.className}'"
        
     remove: ->
         
