@@ -110,6 +110,8 @@ class Sheet
         
         if nameElem
             post.emit 'group', action:'toggle', target:nameElem
+        else if event.target.classList.contains 'group'
+            post.emit 'group', action:'toggle', target:event.target.firstChild
         else
             log "click className: '#{event.target.className}'"
        

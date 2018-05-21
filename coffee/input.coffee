@@ -18,7 +18,7 @@ class Input
         @view.appendChild @input
         @view.addEventListener 'click', => @input.focus()
         @input.addEventListener 'input',  @onInputChanged
-        @input.addEventListener 'change', @execute
+        # @input.addEventListener 'change', @execute
         @input.addEventListener 'blur',   @onBlur
         
         post.on 'input', @onInput
@@ -48,7 +48,11 @@ class Input
     appendText: (txt) -> @setText @text() + txt
     textLength:       -> @text().length
     clear:            -> @setText '' ; @focus()
-    execute:          => if @hasFocus() then post.emit 'exec', @text()
+    execute: => 
+        
+        if @hasFocus() 
+            log 'execute'
+            post.emit 'exec', @text()
     
     text:  -> @plain
     setText: (@plain) -> 

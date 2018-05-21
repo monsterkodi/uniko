@@ -20,12 +20,14 @@ class Titlebar
         @elem.ondblclick = (event) -> post.toMain 'maximizeWindow', window.winID
                 
         @winicon = elem class: 'winicon'
-        @winicon.appendChild elem 'img', src:slash.fileUrl __dirname + '/../img/menu.png'
+        # @winicon.appendChild elem 'img', src:slash.fileUrl __dirname + '/../img/menu.png'
+        @winicon.appendChild elem 'span', text:'🙂', style: 'font-size: 20px; padding-left:5px'
         @elem.appendChild @winicon
         @winicon.addEventListener 'click', -> post.emit 'menuAction', 'Toggle Menu'   
         
         @title = elem class: 'titlebar-title'
-        html  = "<span class='titlebar-name'>#{pkg.name}</span>"
+        # html  = "<span class='titlebar-name'>#{pkg.name}</span>"
+        html  = "<span class='titlebar-name'>unꖶĸo</span>"
         html += "<span class='titlebar-dot'> ● </span>"
         html += "<span class='titlebar-version'>#{pkg.version}</span>"
         @title.innerHTML = html

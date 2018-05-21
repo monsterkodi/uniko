@@ -8,6 +8,8 @@
 
 { empty, post, error, log, _ } = require 'kxk'
 
+{ stringToChars } = require './funcs'
+
 class Exec
 
     constructor: ->
@@ -54,6 +56,7 @@ class Exec
         for cmmd in cmmds
             if not @execCmmd cmmd
                 error 'no command?', cmmd
+                post.emit 'sheet', action:'addChars', chars:stringToChars cmmd
                             
     onExec: (text) =>
         

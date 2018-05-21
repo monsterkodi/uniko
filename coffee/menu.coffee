@@ -21,7 +21,8 @@ class Menu
             # 000   000  000        000        
             # 000   000  000        000        
     
-            text: "#{pkg.name}"
+            # text: "#{pkg.name}"
+            text: "unꖶĸo"
             menu: [
                 text:   "About",                        accel:  'ctrl+shift+/'
             ,
