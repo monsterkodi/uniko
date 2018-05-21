@@ -54,7 +54,6 @@ class Exec
         for cmmd in cmmds
             if not @execCmmd cmmd
                 error 'no command?', cmmd
-                # post.emit 'sheet', action:'addText', text:cmmd
                             
     onExec: (text) =>
         

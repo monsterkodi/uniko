@@ -24,41 +24,55 @@ class Group
         post.on 'group', @onGroup
 
     onGroup: (opt) =>
+        
         opt ?= {}
         switch opt.action
-            when 'removeChars'  then @removeChars opt.group, opt.chars
+            when 'removeChars'  then @removeChars opt
             when 'addGroups'    then @addGroups opt.groups
             when 'toggle'       then @toggle opt.target
             else
                 log 'onGroup', opt
 
-    rangesForGroup: (group) -> @groups[group].split ' '
-    charsForGroup: (group) -> _.flatten @rangesForGroup(group).map (r) -> rangeToChars r
-                
     getGroup: (path, parent=@groups) -> 
+        
         split = path.split ' '
         if split.length == 1
             parent[split[0]]
         else
             @getGroup split.slice(1).join(' '), parent[split[0]]
+            
+    getParent: (path) ->
+        
+        split = path.split ' '
+        if split.length == 1
+            @groups
+        else
+            split.pop()
+            @getGroup split.join ' ' 
+            
+    rangesForGroup: (group) -> @getGroup(group).split ' '
+    charsForGroup:  (group) -> _.flatten @rangesForGroup(group).map (r) -> rangeToChars r
     
-    removeChars: (group, chars) ->
-        log 'remove', chars
-        @groups[group] = rangesToString charsToRanges @charsForGroup(group).filter (c) -> c not in chars
+    removeChars: (opt) ->
+        
+        log 'remove', opt
+        group = opt.group
+        chars = opt.chars
+        name = last group.split ' '
+        @getParent(group)[name] = rangesToString charsToRanges @charsForGroup(group).filter (c) -> c not in chars
         noon.save @groupsFile, @groups
            
     isExpanded: (target) -> target.children.length > 0
         
     toggle: (target) ->
         
-        log "toggle", target.children.length
         if @isExpanded target
             @collapse target
         else
             @expand target
 
     collapse: (target) ->
-        log 'collapse', target.className, target.children.length
+
         while target.children.length > 0
             target.removeChild target.lastChild
             

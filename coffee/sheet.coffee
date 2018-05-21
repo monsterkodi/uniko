@@ -26,7 +26,6 @@ class Sheet
     empty:                          -> @view.children.length == 0
     clear:                          -> @view.innerHTML = ''; window.input.focus()
     backspace:                      -> if not @popChar() then log 'backspace text?'
-    # setText:        (text)          -> @clear(); @addText text
     addChar:        (char)          -> if not @empty() then last(@view.children).innerHTML += spanForChar(char) else @addText spanForChar char
     addChars:       (chars)         -> @addText htmlForChars chars.filter (c) -> window.valid.char c
     addText:        (text)          -> @view.appendChild @elemForText text
@@ -110,8 +109,8 @@ class Sheet
                 if not clist? and selection.length <= 2
                     ancestor = ancestor.parentNode.parentNode
                     clist = ancestor.classList
-                if clist.contains('sheet') and clist.contains('text')
-                    group = ancestor.previousSibling.innerHTML
+                if clist.contains 'text' 
+                    group = ancestor.parentNode.childNodes[0].nodeValue
                     post.emit 'group', action:'removeChars', group:group, chars:stringToChars @currentSelection()
                     document.getSelection().deleteFromDocument()
             
@@ -126,8 +125,6 @@ class Sheet
         opt ?= {}
         switch opt.action
             when 'clear'        then @clear()
-            # when 'setText'      then @setText opt.text
-            # when 'addText'      then @addText opt.text
             when 'insertText'   then @insertText opt
             when 'addGroup'     then @addGroup opt
             when 'insertGroup'  then @insertGroup opt
