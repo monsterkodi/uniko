@@ -116,7 +116,6 @@ class Sheet
             log "click className: '#{event.target.className}'"
        
     remove: ->
-        
         if selection = @currentSelection()
             if document.getSelection().rangeCount
                 range = document.getSelection().getRangeAt(0)
@@ -126,7 +125,8 @@ class Sheet
                     ancestor = ancestor.parentNode.parentNode
                     clist = ancestor.classList
                 if clist.contains 'text' 
-                    group = ancestor.parentNode.childNodes[0].nodeValue
+                    group = ancestor.parentNode.childNodes[0].innerText
+                    log 'remove', group
                     post.emit 'group', action:'removeChars', group:group, chars:stringToChars @currentSelection()
                     document.getSelection().deleteFromDocument()
             

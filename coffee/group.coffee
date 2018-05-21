@@ -56,7 +56,7 @@ class Group
     charsForGroup:  (group) -> _.flatten @rangesForGroup(group).map (r) -> rangeToChars r
     
     removeChars: (opt) ->
-        
+        log 'removeChars', opt
         group = opt.group
         chars = opt.chars
         name = last group.split ' '
