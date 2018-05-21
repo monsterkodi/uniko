@@ -131,3 +131,5 @@ window.valid    = new Valid
 window.sheet    = new Sheet
 window.exec     = new Exec
 window.menu     = new Menu
+
+post.emit 'group', action:'addGroups', groups:''

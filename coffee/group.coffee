@@ -6,7 +6,7 @@
  0000000   000   000   0000000    0000000   000      
 ###
 
-{ post, watch, noon, slash, empty, error, log, _ } = require 'kxk'
+{ post, watch, noon, slash, last, empty, error, log, _ } = require 'kxk'
 
 { spanForChar, htmlForChars, rangeToChars, charsToRanges, rangesToString } = require './funcs'
 
@@ -28,31 +28,52 @@ class Group
         switch opt.action
             when 'removeChars'  then @removeChars opt.group, opt.chars
             when 'addGroups'    then @addGroups opt.groups
-            when 'expand'       then @expand opt.target
+            when 'toggle'       then @toggle opt.target
             else
                 log 'onGroup', opt
 
     rangesForGroup: (group) -> @groups[group].split ' '
     charsForGroup: (group) -> _.flatten @rangesForGroup(group).map (r) -> rangeToChars r
                 
-    isGroup: (group) -> _.isString @groups[group]
+    getGroup: (path, parent=@groups) -> 
+        split = path.split ' '
+        if split.length == 1
+            parent[split[0]]
+        else
+            @getGroup split.slice(1).join(' '), parent[split[0]]
     
     removeChars: (group, chars) ->
         log 'remove', chars
         @groups[group] = rangesToString charsToRanges @charsForGroup(group).filter (c) -> c not in chars
         noon.save @groupsFile, @groups
+           
+    isExpanded: (target) -> target.children.length > 0
+        
+    toggle: (target) ->
+        
+        log "toggle", target.children.length
+        if @isExpanded target
+            @collapse target
+        else
+            @expand target
+
+    collapse: (target) ->
+        log 'collapse', target.className, target.children.length
+        while target.children.length > 0
+            target.removeChild target.lastChild
             
     expand: (target) ->
         name = target.innerHTML
-        log 'expand', name, @isGroup name
-        if @isGroup name
-            text = @htmlForGroup name
-            post.emit 'sheet', action:'insertText', after:target, text:text
+        content = @getGroup name
+        if _.isString content
+            text = @htmlForRangeString content
+            post.emit 'sheet', action:'insertText', parent:target, text:text
         else # contains groups
-            for group,value of @groups[name]
+            for group,value of content
                 post.emit 'sheet', action:'insertGroup', parent:target, group:name + ' ' + group
         
-    htmlForGroup:  (group) -> @rangesForGroup(group).map((r) -> htmlForChars rangeToChars r).join ''
+    htmlForGroup: (group) -> @rangesForGroup(group).map((r) -> htmlForChars rangeToChars r).join ''
+    htmlForRangeString: (rngs) -> rngs.split(' ').map((r) -> htmlForChars rangeToChars r).join ''
             
     addGroups: (names) ->
         

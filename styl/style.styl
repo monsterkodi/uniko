@@ -71,7 +71,7 @@ body
     padding-left        10px
     padding-right       10px
     -webkit-user-select text
-    font-family         "Arial Unicode MS"
+    // font-family         "Arial Unicode MS"
     
 .test-char
     display             inline-block
@@ -96,15 +96,18 @@ body
     pointer-events      all
     font-family         "Arial Unicode MS"
 
-#sheet .sheet.text 
-    margin-left         120px
-    & span
-        display         inline-block
     
-#sheet .sheet.group
+#sheet .group
     cursor              pointer
     font-family         sans-serif
     -webkit-user-select none
+    
+#sheet .text 
+    cursor              text
+    margin-left         120px
+    -webkit-user-select text
+    & span
+        display         inline-block
 
 // 000000000  000  000000000  000      00000000  0000000     0000000   00000000 
 //    000     000     000     000      000       000   000  000   000  000   000

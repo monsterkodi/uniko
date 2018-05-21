@@ -30,13 +30,11 @@ class Sheet
     addChar:        (char)          -> if not @empty() then last(@view.children).innerHTML += spanForChar(char) else @addText spanForChar char
     addChars:       (chars)         -> @addText htmlForChars chars.filter (c) -> window.valid.char c
     addText:        (text)          -> @view.appendChild @elemForText text
-    insertText:     (text,after)    -> after.parentNode.insertBefore @elemForText(text), after.nextSibling
-    insertGroup:    (group, parent) -> parent.appendChild @elemForGroup group 
-    elemForText:    (text)          -> elem class:'sheet text',  html:str text
-    elemForGroup:   (group)         -> elem class:'sheet group', html:str group
-        # groupElem = elem class:'sheet group'
-        # groupElem.appendChild elem class:'sheet title', text:str group
-        # groupElem
+    elemForText:    (text)          -> elem class:'text',  html:str text
+    elemForGroup:   (group)         -> elem class:'group', html:str group
+
+    insertGroup:    (opt)           -> opt.parent.appendChild @elemForGroup opt.group 
+    insertText:     (opt)           -> opt.parent.appendChild @elemForText opt.text
         
     addGroup: (opt) -> 
         @view.appendChild @elemForGroup opt.group
@@ -98,10 +96,7 @@ class Sheet
     onMouseClick: (event) =>
         
         if event.target.classList.contains 'group'
-            if event.target.nextSibling?.classList.contains 'text'
-                event.target.nextSibling.remove()
-            else
-                post.emit 'group', action:'expand', target:event.target
+            post.emit 'group', action:'toggle', target:event.target
         else
             log 'click', event.target.className
        
@@ -133,9 +128,9 @@ class Sheet
             when 'clear'        then @clear()
             # when 'setText'      then @setText opt.text
             # when 'addText'      then @addText opt.text
-            when 'insertText'   then @insertText opt.text, opt.after
+            when 'insertText'   then @insertText opt
             when 'addGroup'     then @addGroup opt
-            when 'insertGroup'  then @insertGroup opt.group, opt.parent
+            when 'insertGroup'  then @insertGroup opt
             when 'addChar'      then @addChar opt.char
             when 'addChars'     then @addChars opt.chars
             when 'fontSize'     then @setFontSize opt.fontSize
