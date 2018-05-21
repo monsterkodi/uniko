@@ -84,7 +84,7 @@ class Sheet
         data = event.dataTransfer.getData "text"
         if @dropTarget?
             group = window.group.groupName @dropTarget
-            index = elem.childIndex(@dropTarget)-1
+            index = elem.childIndex @dropTarget
             chars = stringToChars data
             post.emit 'group', action:'insertChars', group:group, chars:chars, index:index
             
@@ -98,29 +98,7 @@ class Sheet
         @dropTarget?.style.borderRight = ''
         
         delete @dropTarget
-        
-    # 00000000   0000000   000   000  000000000   0000000  000  0000000  00000000  
-    # 000       000   000  0000  000     000     000       000     000   000       
-    # 000000    000   000  000 0 000     000     0000000   000    000    0000000   
-    # 000       000   000  000  0000     000          000  000   000     000       
-    # 000        0000000   000   000     000     0000000   000  0000000  00000000  
-    
-    resetFontSize:      -> @setFontSize 60
-    getFontSize:        -> parseInt window.getComputedStyle(@view, null).getPropertyValue 'font-size'
-    
-    changeFontSize: (d) -> @setFontSize d + @getFontSize()
-        
-    setFontSize:    (s) -> 
-        @view.style.fontSize = "#{s}px" 
-        prefs.set 'sheet:fontSize', s
-        
-    monospace: -> 
-        @view.style.fontFamily = if @view.style.fontFamily then '' else 'monospace' #'"Meslo LG S", "Liberation Mono", "Menlo", "Cousine", "Andale Mono", monospace'
-        log '@view.style.fontFamily', @view.style.fontFamily
-        
-    onWheel: (event) => 
-        if event.ctrlKey then @changeFontSize parseInt -event.deltaY/100
-         
+                 
     # 00     00   0000000   000   000   0000000  00000000
     # 000   000  000   000  000   000  000       000     
     # 000000000  000   000  000   000  0000000   0000000 
@@ -150,7 +128,6 @@ class Sheet
     onMouseClick: (event) =>
 
         nameElem = elem.upElem event.target, class:'name'
-        log 'nameElem', nameElem?, nameElem?.className
         
         if nameElem
             post.emit 'group', action:'toggle', target:nameElem
@@ -172,7 +149,29 @@ class Sheet
                     group = window.group.groupName ancestor
                     post.emit 'group', action:'removeChars', group:group, chars:stringToChars @currentSelection()
                     document.getSelection().deleteFromDocument()
-            
+
+    # 00000000   0000000   000   000  000000000   0000000  000  0000000  00000000  
+    # 000       000   000  0000  000     000     000       000     000   000       
+    # 000000    000   000  000 0 000     000     0000000   000    000    0000000   
+    # 000       000   000  000  0000     000          000  000   000     000       
+    # 000        0000000   000   000     000     0000000   000  0000000  00000000  
+    
+    resetFontSize:      -> @setFontSize 60
+    getFontSize:        -> parseInt window.getComputedStyle(@view, null).getPropertyValue 'font-size'
+    
+    changeFontSize: (d) -> @setFontSize d + @getFontSize()
+        
+    setFontSize:    (s) -> 
+        @view.style.fontSize = "#{s}px" 
+        prefs.set 'sheet:fontSize', s
+        
+    monospace: -> 
+        @view.style.fontFamily = if @view.style.fontFamily then '' else 'monospace' #'"Meslo LG S", "Liberation Mono", "Menlo", "Cousine", "Andale Mono", monospace'
+        log '@view.style.fontFamily', @view.style.fontFamily
+        
+    onWheel: (event) => 
+        if event.ctrlKey then @changeFontSize parseInt -event.deltaY/100
+                    
     #  0000000   000   000   0000000  000   000  00000000  00000000  000000000  
     # 000   000  0000  000  000       000   000  000       000          000     
     # 000   000  000 0 000  0000000   000000000  0000000   0000000      000     
