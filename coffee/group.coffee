@@ -48,9 +48,9 @@ class Group
         if @isGroup name
             text = @htmlForGroup name
             post.emit 'sheet', action:'insertText', after:target, text:text
-        else
-            for name,value of @groups[name]
-                post.emit 'sheet', action:'insertGroup', parent:target, group:name
+        else # contains groups
+            for group,value of @groups[name]
+                post.emit 'sheet', action:'insertGroup', parent:target, group:name + ' ' + group
         
     htmlForGroup:  (group) -> @rangesForGroup(group).map((r) -> htmlForChars rangeToChars r).join ''
             

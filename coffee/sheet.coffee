@@ -33,15 +33,14 @@ class Sheet
     insertText:     (text,after)    -> after.parentNode.insertBefore @elemForText(text), after.nextSibling
     insertGroup:    (group, parent) -> parent.appendChild @elemForGroup group 
     elemForText:    (text)          -> elem class:'sheet text',  html:str text
-    elemForGroup:   (group)         -> 
-        groupElem = elem class:'sheet group'
-        groupElem.appendChild elem class:'sheet title', text:str group
-        groupElem
+    elemForGroup:   (group)         -> elem class:'sheet group', html:str group
+        # groupElem = elem class:'sheet group'
+        # groupElem.appendChild elem class:'sheet title', text:str group
+        # groupElem
         
     addGroup: (opt) -> 
-        groupElem = @elemForGroup opt.group
-        if opt.text then groupElem.appendChild @elemForText opt.text
-        @view.appendChild groupElem
+        @view.appendChild @elemForGroup opt.group
+        if opt.text then @view.appendChild @elemForText opt.text
         
     popChar: -> 
         if not @empty() 
@@ -98,7 +97,7 @@ class Sheet
       
     onMouseClick: (event) =>
         
-        if event.target.classList.contains 'title'
+        if event.target.classList.contains 'group'
             if event.target.nextSibling?.classList.contains 'text'
                 event.target.nextSibling.remove()
             else
