@@ -83,7 +83,10 @@ class Sheet
         
         data = event.dataTransfer.getData "text"
         if @dropTarget?
-            log 'onDrop', data, @dropTarget?, @dropTarget?.innerText
+            group = window.group.groupName @dropTarget
+            index = elem.childIndex(@dropTarget)-1
+            chars = stringToChars data
+            post.emit 'group', action:'insertChars', group:group, chars:chars, index:index
             
         @clearDropTarget event
 
@@ -166,8 +169,7 @@ class Sheet
                     ancestor = ancestor.parentNode.parentNode
                     clist = ancestor.classList
                 if clist.contains 'text' 
-                    group = ancestor.parentNode.childNodes[0].innerText
-                    log 'remove', group
+                    group = window.group.groupName ancestor
                     post.emit 'group', action:'removeChars', group:group, chars:stringToChars @currentSelection()
                     document.getSelection().deleteFromDocument()
             

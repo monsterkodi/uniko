@@ -28,6 +28,7 @@ class Group
         opt ?= {}
         switch opt.action
             when 'removeChars'  then @removeChars opt
+            when 'insertChars'  then @insertChars opt
             when 'addGroups'    then @addGroups opt.groups
             when 'toggle'       then @toggle opt.target
             else
@@ -42,6 +43,7 @@ class Group
             @getGroup split.slice(1).join(' '), parent[split[0]]
             
     groupElem: (target) -> elem.upElem target, class:'group'
+    groupName: (target) -> @groupElem(target).firstChild.innerText
             
     getParent: (path) ->
         
@@ -77,7 +79,6 @@ class Group
         
     toggle: (target) ->
 
-        log 'toggle', target?, target.className, target.innerText, elem.upElem(target, class:'group')?, @isExpanded(target)
         if @isExpanded target
             @collapse target
         else
@@ -90,7 +91,7 @@ class Group
             groupElem.removeChild groupElem.lastChild
             
     expand: (target) ->
-        name = target.innerText
+        name = @groupName target
         content = @getGroup name
         groupElem = @groupElem target
         if _.isString content
