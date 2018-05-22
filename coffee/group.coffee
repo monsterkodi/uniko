@@ -27,10 +27,12 @@ class Group
         
         opt ?= {}
         switch opt.action
+            when 'removeRange'  then @removeRange opt
             when 'removeChars'  then @removeChars opt
             when 'insertChars'  then @insertChars opt
             when 'addGroups'    then @addGroups opt.groups
             when 'toggle'       then @toggle opt.target
+            when 'collapse'     then @collapse opt.target
             else
                 log 'onGroup', opt
 
@@ -58,21 +60,31 @@ class Group
     charsForGroup:  (group) -> _.flatten @rangesForGroup(group).map (r) -> rangeToChars r
     
     insertChars: (opt) ->
-        log 'insertChars', opt        
+        
         group = opt.group
         chars = opt.chars
         index = opt.index
         name = last group.split ' '
         groupChars = @charsForGroup group 
-        groupChars.splice index, 0, chars
+        groupChars.splice.apply groupChars, [index, 0].concat chars
         @getParent(group)[name] = rangesToString charsToRanges groupChars
         noon.save @groupsFile, @groups
         
     removeChars: (opt) ->
+        
         group = opt.group
         chars = opt.chars
         name = last group.split ' '
         @getParent(group)[name] = rangesToString charsToRanges @charsForGroup(group).filter (c) -> c not in chars
+        noon.save @groupsFile, @groups
+        
+    removeRange: (opt) ->
+
+        group = opt.group        
+        name = last group.split ' '
+        chars = @charsForGroup group
+        chars.splice opt.start, opt.end-opt.start+1
+        @getParent(group)[name] = rangesToString charsToRanges chars
         noon.save @groupsFile, @groups
            
     isExpanded: (target) -> @groupElem(target).children.length > 1

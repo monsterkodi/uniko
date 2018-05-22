@@ -44,9 +44,9 @@ $("#main").addEventListener "contextmenu", (event) ->
         combo:  'ctrl+k'
         cb:     -> post.emit 'menuAction', 'Clear'
     ,
-        text:   'Remove'
-        combo:  'delete'
-        cb:     -> post.emit 'menuAction', 'Remove'
+        text:   'Cut'
+        combo:  'ctrl+x'
+        cb:     -> post.emit 'menuAction', 'Cut'
     ,
         text:   'Toggle Menu'
         combo:  'alt+m'
@@ -79,7 +79,7 @@ menuAction = (name, args) ->
         when 'Close Window'         then return win.close()
         when 'Reset'                then return window.input.clear()
         when 'Clear'                then return window.sheet.clear()
-        when 'Remove'               then return window.sheet.remove()
+        when 'Cut'                  then return window.sheet.cut()
         when 'Minimize'             then return win.minimize()
         when 'Maximize'             then if win.isMaximized() then win.unmaximize() else win.maximize()        
         when 'Font Size Reset'      then return window.sheet.resetFontSize()
@@ -104,10 +104,10 @@ document.onkeydown = (event) ->
 
     return if not combo
 
-    switch combo
-        when 'delete' 
-            if not window.input.hasFocus() 
-                return stopEvent event, menuAction 'Remove'
+    # switch combo
+        # when 'ctrl+x' 
+            # if not window.input.hasFocus() 
+                # return stopEvent event, menuAction 'Cut'
     
     return stopEvent(event) if 'unhandled' != window.input.globalModKeyComboCharEvent mod, key, combo, char, event
     return stopEvent(event) if 'unhandled' != window.menu.globalModKeyComboEvent mod, key, combo, event
@@ -119,7 +119,10 @@ document.onkeydown = (event) ->
         when 'ctrl+='                       then menuAction 'Font Size Increase'
         when 'ctrl+-'                       then menuAction 'Font Size Decrease'
         when 'ctrl+0'                       then menuAction 'Font Size Reset'
+        when 'ctrl+x', 'delete'             then window.sheet.cut()
         when 'esc'                          then menuAction 'Reset'
+        
+    null
 
 prefs.init()
 scheme.set prefs.get 'scheme', 'dark'

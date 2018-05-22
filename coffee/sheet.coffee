@@ -20,6 +20,7 @@ class Sheet
         @view.addEventListener 'wheel',     @onWheel
         @view.addEventListener 'mousemove', @onMouseMove
         @view.addEventListener 'click',     @onMouseClick
+        @view.addEventListener 'dragstart', @onDragStart
         @view.addEventListener 'dragover',  @onDragOver
         @view.addEventListener 'drop',      @onDrop
 
@@ -64,6 +65,8 @@ class Sheet
     # 000   000  000   000  000   000  000   000  
     # 0000000    000   000  000   000   0000000   
     
+    onDragStart: (event) =>
+    
     onDragOver: (event) => 
     
         @clearDropTarget event
@@ -87,6 +90,10 @@ class Sheet
             index = elem.childIndex @dropTarget
             chars = stringToChars data
             post.emit 'group', action:'insertChars', group:group, chars:chars, index:index
+            groupElem = elem.upElem @dropTarget, class:'group'
+            while groupElem.children.length > 1
+                groupElem.removeChild groupElem.lastChild
+            @insertText parent:groupElem, text:htmlForChars window.group.charsForGroup group
             
         @clearDropTarget event
 
@@ -133,23 +140,22 @@ class Sheet
             post.emit 'group', action:'toggle', target:nameElem
         else if event.target.classList.contains 'group'
             post.emit 'group', action:'toggle', target:event.target.firstChild
-        else
-            log "click className: '#{event.target.className}'"
+        # else
+            # log "click className: '#{event.target.className}'"
        
-    remove: ->
+    cut: -> 
         if selection = @currentSelection()
-            if document.getSelection().rangeCount
-                range = document.getSelection().getRangeAt(0)
-                ancestor = range.commonAncestorContainer
-                clist = ancestor.classList
-                if not clist? and selection.length <= 2
-                    ancestor = ancestor.parentNode.parentNode
-                    clist = ancestor.classList
-                if clist.contains 'text' 
-                    group = window.group.groupName ancestor
-                    post.emit 'group', action:'removeChars', group:group, chars:stringToChars @currentSelection()
-                    document.getSelection().deleteFromDocument()
-
+            require('electron').clipboard.writeText selection
+            range = document.getSelection().getRangeAt(0)
+            start = elem.childIndex range.startContainer.parentElement
+            end   = elem.childIndex range.endContainer.parentElement
+            groupElem = elem.upElem range.startContainer, class:'group'
+            group = window.group.groupName groupElem
+            post.emit 'group', action:'removeRange', group:group, start:start, end:end
+            while end >= start
+                groupElem.children[1].children[end].remove()
+                end-=1
+                    
     # 00000000   0000000   000   000  000000000   0000000  000  0000000  00000000  
     # 000       000   000  0000  000     000     000       000     000   000       
     # 000000    000   000  000 0 000     000     0000000   000    000    0000000   
