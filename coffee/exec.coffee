@@ -61,12 +61,13 @@ class Exec
     onExec: (text) =>
         
         switch 
-            when text == 'c'       then post.emit 'menuAction', 'Clear'
-            when text == 'd'       then post.emit 'sheet', action:'backspace'
-            when text == 'm'       then post.emit 'sheet', action:'monospace'
-            when text == 's'       then window.valid.saveRanges()
-            when text.startsWith 'g' then post.emit 'group', action:'addGroups', groups:text.substr 1
-            when text.startsWith 'i' then window.valid.addRange text.substr 1
+            when text == 'c'         then post.emit 'menuAction', 'Clear'
+            when text == 'd'         then post.emit 'sheet', action:'backspace'
+            when text == 'm'         then post.emit 'sheet', action:'monospace'
+            when text == 's'         then window.valid.saveRanges()
+            when text.startsWith 'n' then window.group.newGroup  text.substr 1
+            when text.startsWith 'g' then window.group.addGroups text.substr 1
+            when text.startsWith 'i' then window.valid.addRange  text.substr 1
             when /^f\d+/.test text then post.emit 'sheet', action:'fontSize', fontSize:parseInt text.substr 1
             else
                 @execCmmds text

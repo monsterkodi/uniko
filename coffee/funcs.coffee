@@ -22,11 +22,15 @@ class Funcs
     
     @stringToRanges: (s) -> Funcs.charsToRanges Funcs.stringToChars s 
         
-    @stringToRange: (s) -> s.split('+').map (n) -> parseInt n
+    @parseRange: (s) -> s.split('+').map (n) -> parseInt n
+    @stringifyRange: (r) -> "#{r[0]}+#{r[1]}"
+    
+    @groupTextForChars: (chars) -> Funcs.charsToRanges(chars).map((r) -> Funcs.stringifyRange(r)).join ' '
+    @htmlForGroupText:  (text) -> text.split(' ').map((r) -> Funcs.htmlForChars Funcs.rangeToChars Funcs.parseRange r).join ''
     
     @rangeToChars: (r) -> 
             
-        if _.isString(r) then r = Funcs.stringToRange r
+        if _.isString(r) then r = Funcs.parseRange r
         [r[0]..r[0]+r[1]]
     
     @rangesToString: (rngs) -> s = rngs.map((r) -> "#{r[0]}+#{r[1]}").join ' '

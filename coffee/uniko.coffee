@@ -135,4 +135,4 @@ window.sheet    = new Sheet
 window.exec     = new Exec
 window.menu     = new Menu
 
-post.emit 'group', action:'addGroups', groups:''
+window.group.addGroups ''

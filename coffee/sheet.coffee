@@ -190,7 +190,6 @@ class Sheet
         switch opt.action
             when 'clear'        then @clear()
             when 'insertText'   then @insertText opt
-            when 'addGroup'     then @addGroup opt
             when 'insertGroup'  then @insertGroup opt
             when 'addChar'      then @addChar opt.char
             when 'addChars'     then @addChars opt.chars

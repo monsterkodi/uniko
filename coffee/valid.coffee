@@ -8,7 +8,7 @@
 
 { elem, slash, noon, log, _ } = require 'kxk'
 
-{ charsToRanges, stringToRange } = require './funcs'
+{ charsToRanges, parseRange } = require './funcs'
 
 html2canvas = require 'html2canvas'
 
@@ -67,7 +67,7 @@ class Valid
        
     addRange: (range) -> 
     
-        @invalidRanges.push stringToRange range
+        @invalidRanges.push parseRange range
         @invalidRanges = @invalidRanges.sort (a,b) -> a[0]-b[0]
         log @invalidRanges
         
