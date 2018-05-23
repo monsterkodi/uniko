@@ -8,6 +8,9 @@
 
 { keyinfo, scheme, stopEvent, prefs, slash, post, elem, popup, pos, str, log, $ } = require 'kxk'
 
+prefs.init()
+
+Funcs     = require './funcs'
 Exec      = require './exec'
 Input     = require './input'
 Parse     = require './parse'
@@ -124,8 +127,8 @@ document.onkeydown = (event) ->
         
     null
 
-prefs.init()
 scheme.set prefs.get 'scheme', 'dark'
+
 window.titlebar = new Titlebar 
 window.input    = new Input
 window.parse    = new Parse
