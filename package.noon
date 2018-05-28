@@ -1,6 +1,6 @@
 name            uniko
 productName     uniko
-version         0.7.0
+version         0.9.0
 description     unicode toy
 main            js/main.js
 repository
