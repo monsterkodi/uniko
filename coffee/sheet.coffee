@@ -48,6 +48,7 @@ class Sheet
 
     insertGroup: (opt) -> opt.parent.appendChild @elemForGroup opt.group 
     insertText:  (opt) -> opt.parent.appendChild @elemForText opt.text
+    appendElem:  (opt) -> @view.appendChild opt.elem
         
     addGroup: (opt) -> 
         @view.appendChild @elemForGroup opt.group
@@ -123,7 +124,7 @@ class Sheet
         
         selection = @currentSelection()
         if not empty selection
-            if event.ctrlKey
+            if event.altKey
                 post.emit 'input', action:'setText', text:rangesToString stringToRanges selection
             return
             

@@ -14,11 +14,10 @@ class Input
         
         @view  = $ "#input"
         @plain = ''
-        @input = elem 'input', type:'input', class:'input-text', style: 'font-size: 60px', autofocus:true, size:1
+        @input = elem 'input', type:'input', class:'input-text', style: 'font-size: 60px;', autofocus:true, size:1
         @view.appendChild @input
         @view.addEventListener 'click', => @input.focus()
         @input.addEventListener 'input',  @onInputChanged
-        # @input.addEventListener 'change', @execute
         @input.addEventListener 'blur',   @onBlur
         
         post.on 'input', @onInput
@@ -65,7 +64,6 @@ class Input
         fs = parseInt @input.style.fontSize
         while fs > 2 and @input.clientWidth > @view.clientWidth-60
             fs -=1 
-            @input.setAttribute 'rows', '2'
             @input.style.fontSize = "#{fs}px"
         while fs < 60 and @input.clientWidth < @view.clientWidth-60
             fs +=1 

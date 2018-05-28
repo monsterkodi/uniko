@@ -10,6 +10,7 @@ frameWidth          = 6px
 titlebarHeight      = 30px
 titlebarFontSize    = 15px
 fontMono            = "Meslo LG S", "Liberation Mono", "Menlo", "Cousine", "Andale Mono", monospace
+fontUnicode         = "Arial Unicode MS", sans-serif
 
 fill-abs()
     position            absolute
@@ -37,17 +38,23 @@ body
     -webkit-user-select none
     
 #main
-    position            absolute
-    top                 0
-    bottom              0
-    right               0
-    left                0
+    fill-abs()
     top                 titlebarHeight
     scroll              none
     overflow            hidden
     pointer-events      auto
     display             flex
     flex-direction      column
+    border-left         frameBorder
+    border-right        frameBorder
+    border-bottom       frameBorder
+    
+.card
+    margin-top          12px
+    padding-bottom      22px
+    border-radius       6px
+    font-family         fontUnicode
+    font-size           150px
     
 // 000  000   000  00000000   000   000  000000000  
 // 000  0000  000  000   000  000   000     000     
@@ -71,12 +78,11 @@ body
     padding-left        10px
     padding-right       10px
     -webkit-user-select text
-    // font-family         "Arial Unicode MS"
     
 .test-char
     display             inline-block
     font-size           6px
-    font-family         "Arial Unicode MS"
+    font-family         fontUnicode
     color               #fff
     background-color    #000
     pointer-events      none
@@ -94,11 +100,10 @@ body
     overflow            auto
     cursor              text
     pointer-events      all
-    font-family         "Arial Unicode MS"
 
 #sheet .group
     cursor              pointer
-    font-family         sans-serif
+    font-family         fontUnicode
     -webkit-user-select none
     
 .name span:not(:last-child)

@@ -36,6 +36,12 @@ post.on 'reload', -> win.webContents.reloadIgnoringCache()
 post.on 'schemeChanged', -> 
 post.on 'menuAction', (action, args) -> menuAction action, args
 
+#  0000000   0000000   000   000  000000000  00000000  000   000  000000000  
+# 000       000   000  0000  000     000     000        000 000      000     
+# 000       000   000  000 0 000     000     0000000     00000       000     
+# 000       000   000  000  0000     000     000        000 000      000     
+#  0000000   0000000   000   000     000     00000000  000   000     000     
+
 $("#main").addEventListener "contextmenu", (event) ->
     
     absPos = pos event
@@ -77,7 +83,7 @@ menuAction = (name, args) ->
         when 'Toggle Menu'          then return window.menu.toggle()
         when 'Show Menu'            then return window.menu.show()
         when 'Hide Menu'            then return window.menu.hide()
-        when 'DevTools'             then return win.webContents.openDevTools()
+        when 'DevTools'             then return win.webContents.toggleDevTools()
         when 'Reload'               then return win.webContents.reloadIgnoringCache()
         when 'Close Window'         then return win.close()
         when 'Reset'                then return window.input.clear()

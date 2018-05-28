@@ -10,6 +10,8 @@
 
 { stringToChars, toggleRainbow } = require './funcs'
 
+Card = require './card'
+
 class Exec
 
     constructor: ->
@@ -66,6 +68,7 @@ class Exec
             when text == 'm'         then post.emit 'sheet', action:'monospace'
             when text == 's'         then window.valid.saveRanges()
             when text == 'r'         then toggleRainbow()
+            when text.startsWith '.' then window.sheet.appendElem elem:Card.elemForString text
             when text.startsWith 'n' then window.group.newGroup  text.substr 1
             when text.startsWith 'g' then window.group.addGroups text.substr 1
             when text.startsWith 'i' then window.valid.addRange  text.substr 1
