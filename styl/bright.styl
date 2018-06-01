@@ -6,35 +6,7 @@
 0000000    000   000  000   0000000   000   000     000     
 */
 
-frameWidth  = 6px
 frameColor  = #fff
-bgColor     = #eee
-frameBorder = frameWidth solid frameColor
-
-body
-    background          frameColor
-    color               #333
-
-.titlebar
-    background          frameColor
-    color               #888
-
-.titlebar-dot
-    color               #eee
-
-.titlebar-version
-    color               #ccc
-
-#main
-    border-left         frameBorder
-    border-right        frameBorder
-    border-bottom       frameBorder
-    background          bgColor
-    color               #333
-
-pre
-    background          #fff
-    color               #666
         
 // 000  000   000  00000000   000   000  000000000  
 // 000  0000  000  000   000  000   000     000     
@@ -43,71 +15,10 @@ pre
 // 000  000   000  000         0000000      000     
 
 #input
-    // border              1px solid #ddd
     background          frameColor
     
 .input-text 
     color               #000
-    
-// 00     00  00000000  000   000  000   000  
-// 000   000  000       0000  000  000   000  
-// 000000000  0000000   000 0 000  000   000  
-// 000 0 000  000       000  0000  000   000  
-// 000   000  00000000  000   000   0000000   
-            
-.menuItem
-    color               #888
-    background-color    titleColor
-    
-.menuItem.selected
-    color               #666
-    
-.menu:focus .menuItem
-    color               #888
-.menu:focus .menuItem.selected
-    color               #333
-    
-// 00000000    0000000   00000000   000   000  00000000
-// 000   000  000   000  000   000  000   000  000   000
-// 00000000   000   000  00000000   000   000  00000000
-// 000        000   000  000        000   000  000
-// 000         0000000   000         0000000   000
-
-.popup
-    background-color    frameColor
-
-.popupItem
-    color               #888
-    &:not(:last-child)
-        border-bottom   1px solid frameColor
-    &.selected
-        color           #000
-        & .popupCombo
-            color       #aaa
-
-.menuItem:active
-.popupItem:active
-    color               #000
-
-.popupCombo
-    color               #ddd
-    
-.popupItem.separator
-    border-top          1px solid #ddd
-    
-//  0000000   0000000  00000000    0000000   000      000      
-// 000       000       000   000  000   000  000      000      
-// 0000000   000       0000000    000   000  000      000      
-//      000  000       000   000  000   000  000      000      
-// 0000000    0000000  000   000   0000000   0000000  0000000  
-
-::-webkit-scrollbar-corner
-    background-color        bgColor
-
-::-webkit-scrollbar-thumb
-    background-color        #ddd
-        
-::-webkit-scrollbar-thumb:hover
-    background-color        #000
-
+    border              none
+    background          transparent
     

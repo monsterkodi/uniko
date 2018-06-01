@@ -82,10 +82,10 @@ createWindow = ->
         maximizable:     true
         resizable:       true
         minimizable:     true
+        transparent:     true
+        autoHideMenuBar: true
         fullscreen:      false
         show:            false
-        titleBarStyle:   'hidden'
-        autoHideMenuBar: true
         frame:           false
         icon:            slash.path __dirname + '/../img/uniko.ico'
 

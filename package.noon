@@ -1,6 +1,6 @@
 name            uniko
 productName     uniko
-version         0.9.0
+version         0.11.0
 description     unicode toy
 main            js/main.js
 repository
@@ -17,11 +17,11 @@ license         Unlicense
 bugs
                 url  https://github.com/monsterkodi/uniko/issues
 dependencies
-                coffeescript  ^2.3.0
+                coffeescript  ^2.3.1
                 color         ^3.0.0
                 html2canvas   ^1.0.0-alpha.12
-                kxk           ^0.76.0
+                kxk           ^0.90.0
 devDependencies
-                electron        ^2.0.1
+                electron        ^2.0.2
                 electron-packager  ^12.1.0
                 electron-rebuild  ^1.7.3
