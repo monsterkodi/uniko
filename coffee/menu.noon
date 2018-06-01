@@ -6,11 +6,11 @@
 # 000   000  00000000  000   000   0000000
 
 uniko
-    About                   ctrl+, ,
+    About                   ctrl+,
     -
-    Clear                   ctrl+k k
+    Clear                   ctrl+k
     --
-    Quit                    ctrl+q q
+    Quit                    ctrl+q
 
 # 000   000  000  000   000  0000000     0000000   000   000
 # 000 0 000  000  0000  000  000   000  000   000  000 0 000
@@ -19,15 +19,15 @@ uniko
 # 00     00  000  000   000  0000000     0000000   00     00
 
 Window
-    Close                   ctrl+w w
+    Close                   ctrl+w
     -
-    Toggle Menu             alt+m m
-    Toggle Scheme           alt+i ctrl+i i
+    Toggle Menu             alt+m
+    Toggle Scheme           alt+i ctrl+i
     --
     Minimize                alt+ctrl+shift+m
     ---
-    Reload                  alt+ctrl+l r
-    DevTools                alt+ctrl+i i
+    Reload                  alt+ctrl+l
+    DevTools                alt+ctrl+i
     ----
     Font Size
         Increase            ctrl+=
