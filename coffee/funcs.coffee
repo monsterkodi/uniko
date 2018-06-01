@@ -6,13 +6,19 @@
 000        0000000   000   000   0000000  0000000 
 ###
 
-{ last, prefs, elem, randInt, log, $, _ } = require 'kxk'
+{ post, last, prefs, elem, randInt, log, $, _ } = require 'kxk'
 
 Color = require 'color'
 
 rainbow       = prefs.get 'rainbow', true
 rainbowIndex  = -1
 rainbowColors = [0...10].map (h) -> Color(h:h*270/10, s:100, l:80).string()
+
+post.on 'schemeChanged', (scheme) ->
+    
+    rainbowColors = switch scheme
+        when 'dark'   then [0...10].map (h) -> Color(h:h*270/10, s:100, l:80).string()
+        when 'bright' then [0...10].map (h) -> Color(h:h*270/10, s:100, l:30).string()
 
 class Funcs
 
