@@ -46,7 +46,6 @@ log args if args.verbose
 # 000         0000000   0000000      000     
 
 post.on 'menuAction', (action, arg) -> onMenuAction action, arg
-post.on 'closeWin',             -> win?.close()
 post.on 'showAbout',            -> showAbout()
 post.on 'quitApp',              -> quitApp()
 
