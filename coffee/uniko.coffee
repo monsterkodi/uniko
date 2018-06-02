@@ -6,9 +6,11 @@
  0000000   000   000  000  000   000   0000000   
 ###
 
-{ keyinfo, title, scheme, stopEvent, prefs, slash, post, elem, popup, pos, str, log, $, _ } = require 'kxk'
+{ args, keyinfo, title, scheme, stopEvent, prefs, slash, post, elem, popup, pos, str, log, $, _ } = require 'kxk'
 
 prefs.init()
+
+log 'args', args
 
 Funcs     = require './funcs'
 Exec      = require './exec'

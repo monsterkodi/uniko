@@ -6,7 +6,7 @@
 000   000  000   000  000  000   000
 ###
 
-{ prefs, empty, slash, about, karg, post, watch, childp, fs, log, error, _ } = require 'kxk'
+{ prefs, empty, slash, about, args, post, watch, childp, fs, log, error, _ } = require 'kxk'
 
 electron = require 'electron'
 pkg      = require '../package.json'
@@ -26,19 +26,18 @@ debug         = false
 # 000   000  000   000  000   000       000
 # 000   000  000   000   0000000   0000000
 
-args  = karg """
-
-#{pkg.name}
-
-    noprefs   . ? don't load preferences     . = false
-    DevTools  . ? open developer tools       . = false
-    watch     . ? watch sources for changes  . = false
-
-version  #{pkg.version}
-
-"""
+args = args.init """
+    
+    noprefs     don't load preferences      false
+    DevTools    open developer tools        false
+    watch       watch sources for changes   false
+    verbose     |                           false
+            
+    """
 
 app.exit 0 if not args?
+
+log args if args.verbose
 
 # 00000000    0000000    0000000  000000000  
 # 000   000  000   000  000          000     
@@ -187,11 +186,13 @@ app.on 'ready', ->
     
     app.setName pkg.productName
 
-    if not args.noprefs
-        prefs.init
-            shortcut: 'CmdOrCtrl+Alt+U'
-
-    electron.globalShortcut.register prefs.get('shortcut'), showWindow
+    prefs.init shortcut: 'CmdOrCtrl+Alt+U'
+    
+    if args.noprefs
+        prefs.store.clear()
+    else
+        if prefs.get 'shortcut'
+            electron.globalShortcut.register prefs.get('shortcut'), showWindow
 
     showWindow()
     
