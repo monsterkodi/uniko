@@ -20,7 +20,7 @@ dependencies
                 coffeescript  ^2.3.1
                 color         ^3.0.0
                 html2canvas   ^1.0.0-alpha.12
-                kxk           ^0.100.0
+                kxk           https://github.com/monsterkodi/kxk.git
 devDependencies
                 electron        ^2.0.2
                 electron-packager  ^12.1.0
