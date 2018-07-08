@@ -7,8 +7,10 @@ if rm -rf uniko-win32-x64; then
     
     node_modules/.bin/electron-rebuild
     
-    IGNORE="/(.*\.dmg$|Icon$|watch$|coffee$|icons$|.*md$|pug$|styl$|.*\.noon$|.*\.lock$|img/banner\.png)"
+    IGNORE="/(.*\.dmg$|Icon$|watch$|icons$|.*md$|pug$|styl$|.*\.lock$|img/banner\.png)"
     
     node_modules/electron-packager/cli.js . --overwrite --icon=img/app.ico --ignore=$IGNORE
+    
+    rm -rf uniko-win32-x64/resources/app/inno
 
 fi

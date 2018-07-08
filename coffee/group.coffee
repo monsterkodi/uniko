@@ -14,7 +14,11 @@ class Group
 
     constructor: ->
 
-        @groupsFile = slash.join __dirname, '../bin/groups.noon'
+        @groupsFile = slash.join slash.userData(), 'groups.noon'
+        
+        if not slash.fileExists @groupsFile
+            noon.save @groupsFile, noon.load slash.join __dirname, '../bin/groups.noon'
+            
         @groups = noon.load @groupsFile
 
         @watcher = watch.watch @groupsFile
