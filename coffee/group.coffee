@@ -6,9 +6,11 @@
  0000000   000   000   0000000    0000000   000      
 ###
 
-{ post, watch, noon, slash, last, elem, empty, error, log, _ } = require 'kxk'
+{ post, noon, slash, last, elem, empty, error, log, _ } = require 'kxk'
 
 { rangeToChars, groupTextForChars, htmlForGroupText } = require './funcs'
+
+watch = require 'chokidar'
 
 class Group
 
