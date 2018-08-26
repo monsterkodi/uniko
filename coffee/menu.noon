@@ -6,11 +6,11 @@
 # 000   000  00000000  000   000   0000000
 
 uniko
-    About                   ctrl+,
+    About                   cmdctrl+,
     -
-    Clear                   ctrl+k
+    Clear                   cmdctrl+k
     --
-    Quit                    ctrl+q
+    Quit                    cmdctrl+q
 
 # 000   000  000  000   000  0000000     0000000   000   000
 # 000 0 000  000  0000  000  000   000  000   000  000 0 000
@@ -19,7 +19,7 @@ uniko
 # 00     00  000  000   000  0000000     0000000   00     00
 
 Window
-    Close                   ctrl+w
+    Close                   cmdctrl+w
     -
     Toggle Menu             alt+m
     Toggle Scheme           alt+i ctrl+i
@@ -27,10 +27,10 @@ Window
     Minimize                alt+ctrl+shift+m
     ---
     Screenshot              f3
-    Reload                  alt+ctrl+l
-    DevTools                alt+ctrl+i
+    Reload                  cmdalt+ctrl+l
+    DevTools                cmdalt+ctrl+i
     ----
     Font Size
-        Increase            ctrl+=
-        Decrease            ctrl+-
-        Reset               ctrl+0
+        Increase            cmdctrl+=
+        Decrease            cmdctrl+-
+        Reset               cmdctrl+0

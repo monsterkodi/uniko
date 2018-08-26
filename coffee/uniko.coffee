@@ -34,12 +34,14 @@ onMenuAction = (action, args) ->
 
     switch action
 
-        when 'Reset'                then return window.input.clear()
-        when 'Clear'                then return window.sheet.clear()
-        when 'Cut'                  then return window.sheet.cut()
-        when 'Font Size Reset'      then return window.sheet.resetFontSize()
-        when 'Font Size Increase'   then return window.sheet.changeFontSize +1
-        when 'Font Size Decrease'   then return window.sheet.changeFontSize -1
+        when 'Esc'        then return window.input.clear()
+        when 'Clear'      then return window.sheet.clear()
+        when 'Cut'        then return window.sheet.cut()
+        when 'Reset'      then return window.sheet.resetFontSize()
+        when 'Increase'   then return window.sheet.changeFontSize +1
+        when 'Decrease'   then return window.sheet.changeFontSize -1
+        else
+            log "unhandled menuAction #{action}"
         
 post.on 'menuAction', onMenuAction
     
@@ -51,14 +53,16 @@ post.on 'menuAction', onMenuAction
 
 onCombo = (combo, info) ->
 
+    log 'onCombo', combo
+    
     return stopEvent(info.event) if 'unhandled' != window.input.globalModKeyComboCharEvent info.mod, info.key, info.combo, info.char, info.event
     
     switch combo
-        when 'ctrl+='           then menuAction 'Font Size Increase'
-        when 'ctrl+-'           then menuAction 'Font Size Decrease'
-        when 'ctrl+0'           then menuAction 'Font Size Reset'
+        when 'command+x'        then window.sheet.cut()
+        when 'command+c'        then window.sheet.copy()
+        when 'command+v'        then window.sheet.paste()
         when 'ctrl+x', 'delete' then window.sheet.cut()
-        when 'esc'              then menuAction 'Reset'
+        when 'esc'              then menuAction 'Esc'
         
 post.on 'combo', onCombo        
         

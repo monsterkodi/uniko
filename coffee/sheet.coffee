@@ -144,6 +144,17 @@ class Sheet
         # else
             # log "click className: '#{event.target.className}'"
        
+    copy: -> 
+        if selection = @currentSelection()
+            require('electron').clipboard.writeText selection
+       
+    paste: -> 
+        selection = window.getSelection()
+    
+        if not selection.rangeCount then return
+    
+        selection.getRangeAt(0).insertNode document.createTextNode require('electron').clipboard.readText() 
+            
     cut: -> 
         if selection = @currentSelection()
             require('electron').clipboard.writeText selection
