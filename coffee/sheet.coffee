@@ -6,14 +6,14 @@
 0000000   000   000  00000000  00000000     000   
 ###
 
-{ post, prefs, elem, last, empty, str, pos, log, $, _ } = require 'kxk'
+{ $, elem, empty, kpos, kstr, last, post, prefs } = require 'kxk'
 
 { stringToChars, stringPop, stringToRanges, rangesToString, 
   validChar, rangeToChars, spanForChar, htmlForChars } = require './funcs'
 
 class Sheet
 
-    constructor: ->
+    @: ->
         
         @view = $ "#sheet"
         @setFontSize prefs.get 'sheet:fontSize', 60
@@ -32,7 +32,7 @@ class Sheet
     addChar:        (char)          -> if not @empty() then last(@view.children).innerHTML += spanForChar(char) else @addText spanForChar char
     addChars:       (chars)         -> @addText htmlForChars chars.filter (c) -> window.valid.char c
     addText:        (text)          -> @view.appendChild @elemForText text
-    elemForText:    (text)          -> elem class:'text',  html:str text
+    elemForText:    (text)          -> elem class:'text',  html:kstr text
     elemForGroup:   (group)         -> 
     
         groupElem = elem class:'group'
@@ -72,7 +72,7 @@ class Sheet
     
         @clearDropTarget event
         
-        eventPos = pos event 
+        eventPos = kpos event 
         dropElem = document.elementFromPoint eventPos.x, eventPos.y
         if dropElem.parentNode.classList.contains 'text'
             @dropTarget = dropElem

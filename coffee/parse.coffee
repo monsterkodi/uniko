@@ -6,11 +6,11 @@
 000        000   000  000   000  0000000   00000000
 ###
 
-{ post, log, _ } = require 'kxk'
+{ post } = require 'kxk'
 
 class Parse
 
-    constructor: () ->
+    @: () ->
         
         post.on 'inputChanged', @onInput
         

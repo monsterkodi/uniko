@@ -12,7 +12,7 @@
 
 class Group
 
-    constructor: ->
+    @: ->
 
         @groupsFile = slash.join slash.userData(), 'groups.noon'
         

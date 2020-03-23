@@ -14,7 +14,7 @@ Card = require './card'
 
 class Exec
 
-    constructor: ->
+    @: ->
         
         post.on 'exec', @onExec
                 

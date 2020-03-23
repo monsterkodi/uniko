@@ -6,7 +6,7 @@
     0      000   000  0000000  000  0000000  
 ###
 
-{ elem, slash, noon, log, _ } = require 'kxk'
+{ elem, noon, slash } = require 'kxk'
 
 { charsToRanges, parseRange } = require './funcs'
 
@@ -14,7 +14,7 @@ html2canvas = require 'html2canvas'
 
 class Valid
 
-    constructor: ->
+    @: ->
         
         @invalid = new Set [1]
         @square = null
@@ -22,7 +22,7 @@ class Valid
         
         @rangesFile = slash.join __dirname, '../bin/invalid.noon'
         @invalidRanges = noon.load @rangesFile
-        log '@invalidRanges', @invalidRanges.length
+        # log '@invalidRanges', @invalidRanges.length
         # @validate()
         
     validate: ->
@@ -59,7 +59,7 @@ class Valid
             imageData = context.getImageData 0, 0, canvas.width, canvas.height
             dataBuffer = imageData.data
             if dataBuffer.length == 280 
-                if dataBuffer.every (v,i) => v == @square[i]
+                if dataBuffer.every((v,i) => v == @square[i])
                     # log 'invalid', @current, canvas.width, canvas.height, dataBuffer.length
                     @invalid.add @current
             log @current, @invalid.has @current

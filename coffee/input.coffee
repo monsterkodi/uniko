@@ -6,11 +6,11 @@
 000  000   000  000         0000000      000   
 ###
 
-{ post, elem, empty, str, log, $ } = require 'kxk'
+{ $, elem, fs, kstr, post } = require 'kxk'
 
 class Input
 
-    constructor: ->
+    @: ->
         
         @view  = $ "#input"
         @plain = ''
@@ -41,7 +41,7 @@ class Input
     hasSelection:     -> @input.selectionEnd - @input.selectionStart != 0
     clearSelection:   -> @input.setSelectionRange @input.selectionEnd, @input.selectionEnd
     
-    popChar:    (txt) -> txt.substr 0, txt.length-1
+    popChar:    (txt) -> txt.subkstr 0, txt.length-1
     backspace:        -> @setText @popChar @text()
     complete:         -> log 'complete'
     appendText: (txt) -> @setText @text() + txt
@@ -60,7 +60,7 @@ class Input
         
     sizeInput: ->
         
-        @input.setAttribute 'size', str Math.max 1, @plain.length+1
+        @input.setAttribute 'size', kstr Math.max 1, @plain.length+1
         fs = parseInt @input.style.fontSize
         while fs > 2 and @input.clientWidth > @view.clientWidth-60
             fs -=1 

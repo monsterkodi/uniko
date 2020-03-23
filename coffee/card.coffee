@@ -6,13 +6,13 @@
  0000000  000   000  000   000  0000000  
 ###
 
-{ elem, first, noon, log, _ } = require 'kxk'
+{ _, elem, noon } = require 'kxk'
 
 { stringToChars, spanForChar } = require './funcs'
 
 class Card
 
-    constructor: () ->
+    @: () ->
 
     @htmlForString: (s) -> @elemForString(s).outerHTML
         
