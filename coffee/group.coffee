@@ -6,7 +6,7 @@
  0000000   000   000   0000000    0000000   000      
 ###
 
-{ watch, post, noon, slash, last, elem, empty, error, log, _ } = require 'kxk'
+{ _, elem, empty, last, noon, post, slash, watch } = require 'kxk'
 
 { rangeToChars, groupTextForChars, htmlForGroupText } = require './funcs'
 
@@ -14,7 +14,7 @@ class Group
 
     @: ->
 
-        @groupsFile = slash.join slash.userData(), 'groups.noon'
+        @groupsFile = slash.join post.get('userData'), 'groups.noon'
         
         if not slash.fileExists @groupsFile
             noon.save @groupsFile, noon.load slash.join __dirname, '../bin/groups.noon'
@@ -22,10 +22,10 @@ class Group
         @groups = noon.load @groupsFile
 
         @watcher = watch.watch @groupsFile
-        @watcher.on 'change', => @groups = noon.load @groupsFile
-        @watcher.on 'error', (err) -> error err
+        @watcher.on 'change' => @groups = noon.load @groupsFile
+        @watcher.on 'error' (err) -> error err
         
-        post.on 'group', @onGroup
+        post.on 'group' @onGroup
 
     onGroup: (opt) =>
         
